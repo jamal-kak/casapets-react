@@ -1,8 +1,9 @@
 import { useState } from "react";
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, useLocation, Navigate } from "react-router-dom";
 import Topbar from "./scenes/global/Topbar";
 import Sidebar from "./scenes/global/Sidebar";
 import Dashboard from "./scenes/dashboard";
+import SignIn from "./scenes/signIn/Signin";
 // import Team from "./scenes/team";
 // import Invoices from "./scenes/invoices";
 // import Contacts from "./scenes/contacts";
@@ -16,20 +17,35 @@ import Dashboard from "./scenes/dashboard";
 import { CssBaseline, ThemeProvider } from "@mui/material";
 import { ColorModeContext, useMode } from "./theme";
 
+import { useAuthContext } from "./hooks/useAuthContext";
+
 function App() {
+  const { user } = useAuthContext();
   const [theme, colorMode] = useMode();
   const [isSidebar, setIsSidebar] = useState(true);
+  const location = useLocation();
+
+  // Determine if the current route is the login page
+  const isLoginPage = location.pathname === "/login";
 
   return (
     <ColorModeContext.Provider value={colorMode}>
       <ThemeProvider theme={theme}>
         <CssBaseline />
         <div className="app">
-          <Sidebar isSidebar={isSidebar} />
+          {!isLoginPage && <Sidebar isSidebar={isSidebar} />}
           <main className="content">
-            <Topbar setIsSidebar={setIsSidebar} />
+            {!isLoginPage && <Topbar setIsSidebar={setIsSidebar} />}
             <Routes>
-              <Route path="/" element={<Dashboard />} />
+              <Route
+                path="/"
+                element={user ? <Dashboard /> : <Navigate to="/login" />}
+              />
+              <Route
+                path="/login"
+                element={!user ? <SignIn /> : <Navigate to="/" />}
+              />
+
               {/* <Route path="/team" element={<Team />} /> */}
               {/* <Route path="/contacts" element={<Contacts />} /> */}
               {/* <Route path="/invoices" element={<Invoices />} /> */}
