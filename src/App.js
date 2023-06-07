@@ -18,6 +18,9 @@ import { CssBaseline, ThemeProvider } from "@mui/material";
 import { ColorModeContext, useMode } from "./theme";
 
 import { useAuthContext } from "./hooks/useAuthContext";
+import Races from "./scenes/races";
+import Boxs from "./scenes/boxs";
+
 
 function App() {
   const { user } = useAuthContext();
@@ -32,6 +35,7 @@ function App() {
     <ColorModeContext.Provider value={colorMode}>
       <ThemeProvider theme={theme}>
         <CssBaseline />
+        
         <div className="app">
           {!isLoginPage && <Sidebar isSidebar={isSidebar} />}
           <main className="content">
@@ -40,6 +44,14 @@ function App() {
               <Route
                 path="/"
                 element={user ? <Dashboard /> : <Navigate to="/login" />}
+              />
+              <Route
+                path="/races"
+                element={user ? <Races /> : <Navigate to="/login" />}
+              />
+              <Route
+                path="/boxs"
+                element={user ? <Boxs /> : <Navigate to="/login" />}
               />
               <Route
                 path="/login"
@@ -59,6 +71,7 @@ function App() {
             </Routes>
           </main>
         </div>
+        
       </ThemeProvider>
     </ColorModeContext.Provider>
   );

@@ -127,9 +127,17 @@ const Sidebar = () => {
             >
               Data
             </Typography>
+           
             <Item
-              title="Manage Team"
-              to="/team"
+              title="Manage Races"
+              to="/races"
+              icon={<PeopleOutlinedIcon />}
+              selected={selected}
+              setSelected={setSelected}
+            />
+            <Item
+              title="Manage Boxs"
+              to="/boxs"
               icon={<PeopleOutlinedIcon />}
               selected={selected}
               setSelected={setSelected}
