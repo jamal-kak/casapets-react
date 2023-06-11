@@ -13,17 +13,21 @@ import MenuItem from '@mui/material/MenuItem';
 
 
 
-export default function BoxModal({open,setOpen, boxInfo, editBox}) {
+export default function ServiceModal({open,setOpen, serviceInfo, editService}) {
   
 
   
-  const [ boxName ,setBoxName ] = useState({});
-  const [ boxType ,setBoxType ] = useState({});
+    const [name, setName] = useState('');
+    const [reference, setReference] = useState('');
+    const [type, setType] = useState('');
+    const [status, setStatus] = useState('');
 
 
   useEffect(()=>{
-    setBoxName(boxInfo.libelle)   
-    setBoxType(boxInfo.type)   
+    setName(serviceInfo.title)   
+    setReference(serviceInfo.reference)   
+    setType(serviceInfo.type_key)   
+    setStatus(serviceInfo.status_key)   
 
   },[])
 
@@ -32,22 +36,29 @@ export default function BoxModal({open,setOpen, boxInfo, editBox}) {
 
 
   const handleLibelleChange = (e) => {    
-    setBoxName( e.target.value )    
+    setName( e.target.value )    
   }
+  const handleReferenceChange = (event) => {
+    setReference(event.target.value);
+  };
 
   const handleTypeChange = (event) => {
-    setBoxType(event.target.value);
-};
+    setType(event.target.value);
+  };
+  
+  const handleStatusChange = (event) => {
+    setStatus(event.target.value);
+  };
 
 
   const handleSubmit = () => {
-    editBox(boxName,boxType, boxInfo.id, setOpen)
+    editService(name,reference,type,status, serviceInfo.id, setOpen)
     
 };
 
 
 
-  // console.log("box",box);
+  // console.log("service",service);
 
   return (
     <div>
@@ -55,31 +66,54 @@ export default function BoxModal({open,setOpen, boxInfo, editBox}) {
         Open form dialog
       </Button>
       <Dialog open={open} onClose={handleClose}>
-        <DialogTitle>Modifier le Box : {boxInfo.id} </DialogTitle>
+        <DialogTitle>Modifier le Service : {serviceInfo.id} </DialogTitle>
         <DialogContent>
           
           <TextField
             // autoFocus
             margin="dense"
-            id="libelle"
-            label="Libelle"
+            id="title"
+            label="Name"
             type="text"
             fullWidth
             variant="standard"
-            value={boxName  }
+            value={name  }
             onChange={handleLibelleChange}
+          />
+          <TextField
+            // autoFocus
+            margin="dense"
+            id="libelle"
+            label="Reference"
+            type="text"
+            fullWidth
+            variant="standard"
+            value={reference}
+            onChange={handleReferenceChange}
           />
           <Select
               sx={{ mt: 3, minWidth: 220 }} size="large"
               fullWidth
               labelId="demo-simple-select-label"
               id="demo-simple-select"
-              value={boxType}
-              label="Type du box"
+              value={type}
+              label="Type du service"
               onChange={handleTypeChange}
           >
               <MenuItem value={1} variant="contained">Type 1</MenuItem>
               <MenuItem value={2} variant="contained">Type 2</MenuItem>
+          </Select>
+          <Select
+              sx={{ mt: 3, minWidth: 220 }} size="large"
+              fullWidth
+              labelId="demo-simple-select-label"
+              id="demo-simple-select"
+              value={status}
+              label="Type du service"
+              onChange={handleStatusChange}
+          >
+              <MenuItem value={1} variant="contained">Active</MenuItem>
+              <MenuItem value={2} variant="contained">Desactive</MenuItem>
           </Select>
 
         </DialogContent>

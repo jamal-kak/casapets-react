@@ -1,7 +1,8 @@
-import React, { createContext, useReducer, useEffect } from 'react';
+import React, {useState, createContext, useReducer, useEffect } from 'react';
 import axios from 'axios';
 import { RACES_API_URL } from '../UTILS/APIS';
 
+import CustomSnackbar from '../scenes/global/snackbar'
 
 
 const initialState = {
@@ -138,8 +139,12 @@ export const RacesContextProvider = ({ children }) => {
         headers: { 'Content-Type': 'application/json' }
       });
       fetchRaces(RACES_API_URL);
+
+        handleSnackbar('Race added successfully', 'success');
     } catch (error) {
       dispatch({ type: 'ADD_RACES_FAILURE', payload: error.message });
+
+        handleSnackbar('Failed to add race', 'error');
     }
   };
   const editRace = async (raceName, raceType,raceID , setOpen) => {
@@ -163,8 +168,13 @@ export const RacesContextProvider = ({ children }) => {
       });
       fetchRaces(RACES_API_URL);
       setOpen(false);
+
+      handleSnackbar('Race edited successfully', 'success');
+
     } catch (error) {
       dispatch({ type: 'EDIT_RACES_FAILURE', payload: error.message });
+
+        handleSnackbar('Failed to edit race', 'error');
     }
   };
   const deleteRace = async (raceID, setOpenDeleteDialogue) => {
@@ -180,10 +190,14 @@ export const RacesContextProvider = ({ children }) => {
       const response = await axios.delete(RACES_API_URL+raceID);
       fetchRaces(RACES_API_URL);
       setOpenDeleteDialogue(false);
+        handleSnackbar('Race deleted successfully', 'success');
     } catch (error) {
       dispatch({ type: 'DELETE_RACES_FAILURE', payload: error.message });
+
+        handleSnackbar('Failed to delete race', 'error');
     }
   };
+
 
   const nextPage = () => {
     fetchRaces(state.races.next);
@@ -196,6 +210,24 @@ export const RacesContextProvider = ({ children }) => {
   useEffect(() => {
     fetchRaces(RACES_API_URL); // Call fetchRaces on component mount
   }, []);
+
+
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState('');
+  const [snackbarSeverity, setSnackbarSeverity] = useState('success');
+
+  const handleSnackbarClose = () => {
+    setSnackbarOpen(false);
+  };
+
+  const handleSnackbar = (message, severity = 'success') => {
+    setSnackbarMessage(message);
+    setSnackbarSeverity(severity);
+    setSnackbarOpen(true);
+  };
+
+
+
 
   return (
     <RacesContext.Provider
@@ -212,6 +244,12 @@ export const RacesContextProvider = ({ children }) => {
       }}
     >
       {children}
+      <CustomSnackbar
+        open={snackbarOpen}
+        message={snackbarMessage}
+        severity={snackbarSeverity}
+        handleClose={handleSnackbarClose}
+      />
     </RacesContext.Provider>
   );
 };

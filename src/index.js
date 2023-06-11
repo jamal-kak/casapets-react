@@ -6,16 +6,19 @@ import { BrowserRouter } from "react-router-dom";
 import { AuthContextProvider } from "./context/authContext";
 import { RacesContextProvider } from "./context/racesContext";
 import { BoxsContextProvider } from "./context/boxsContext";
+import { ServicesContextProvider } from "./context/servicesContext";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
     <AuthContextProvider>
       <RacesContextProvider>
-      <BoxsContextProvider>
+       <BoxsContextProvider>
+        <ServicesContextProvider>
           <BrowserRouter>
             <App />
           </BrowserRouter>
+         </ServicesContextProvider>
         </BoxsContextProvider>
       </RacesContextProvider>
     </AuthContextProvider>

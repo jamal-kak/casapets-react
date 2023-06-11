@@ -19,10 +19,11 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
+import Chip from '@mui/material/Chip';
 
 
 
-import BoxModal from './boxModal';
+import ServiceModal from './serviceModal';
 
 
 
@@ -30,28 +31,28 @@ import BoxModal from './boxModal';
 
 
 import { LinearProgress , Container} from "@mui/material";
-import { BoxsContext } from '../../context/boxsContext';
-import { BOX_API_URL } from "../../UTILS/APIS";
+import { ServicesContext } from '../../context/servicesContext';
+import { SERVICE_API_URL } from "../../UTILS/APIS";
 import CustomizedSnackbars from "../global/snackbar";
 
 
 
-const Boxs = () => {
+const Services = () => {
     
     const [open, setOpen] = useState(false);
-    const [boxInfo, setBoxInfo] = useState(null);
+    const [serviceInfo, setServiceInfo] = useState(null);
     const [openDeleteDialogue, setOpenDeleteDialogue] = useState(false);
     
     // openSnackbar,setOpenSnackbar, message,messageType
 
-    const boxsContext = useContext(BoxsContext);
-    const { boxs, loading, error, fetchBoxs, addBox, editBox, nextPage, prevPage, deleteBox, success } = boxsContext;
+    const servicesContext = useContext(ServicesContext);
+    const { services, loading, error, fetchServices, addService, editService, nextPage, prevPage, deleteService, success } = servicesContext;
 
-    // console.log("ttttttt",boxs);
+    // console.log("ttttttt",services);
     
       // useEffect(() => {
-      //   // console.log("ttttttt",boxs);
-      //   fetchBoxs(BOX_API_URL);
+      //   console.log("services",services);
+      //   fetchServices(SERVICE_API_URL);
       // }, []);
 
       const options = { year: "numeric", month: "long", day: "numeric"}
@@ -60,11 +61,25 @@ const Boxs = () => {
         return ('0' + date.getDate()).slice(-2) + '/' + ('0' + (date.getMonth() + 1)).slice(-2) + '/' + date.getFullYear() + ' ' + ('0' + date.getHours()).slice(-2) + ':' + ('0' + date.getMinutes()).slice(-2);
     }
   
+
     const columns = [
-      { field: 'id', headerName: 'ID', width: 90, align: 'center', headerAlign: 'center' },
       {
-        field: 'libelle',
-        headerName: 'Libellé',
+        field: 'id',
+        headerName: 'ID',
+        width: 30,
+        align: 'center',
+        headerAlign: 'center',
+      },
+      {
+        field: 'reference',
+        headerName: 'Reference',
+        width: 150,
+        align: 'center',
+        headerAlign: 'center',
+      },
+      {
+        field: 'title',
+        headerName: 'Title',
         width: 250,
         editable: true,
         align: 'center',
@@ -72,29 +87,51 @@ const Boxs = () => {
       },
       {
         field: 'type',
-        headerName: 'Box type',
+        headerName: 'Service type',
         width: 150,
         editable: true,
         align: 'center',
         headerAlign: 'center',
       },
       {
+        field: 'status',
+        headerName: 'Status',
+        width: 120,
+        renderCell: (params) => {
+          let chipColor;
+    
+          switch (params.value) {
+            case 'Active':
+              chipColor = 'success';
+              break;
+            case 'Inactive':
+              chipColor = 'secondary';
+              break;
+            case 'Pending':
+              chipColor = 'warning';
+              break;
+            default:
+              chipColor = 'default';
+          }
+    
+          return <Chip label={params.value} color={chipColor} />;
+        },
+        align: 'center',
+        headerAlign: 'center',
+      },
+      {
         field: 'created_at',
         headerName: 'Ajouté le',
-        type: 'number',
-        width: 110,
-        editable: true,
-        valueFormatter: params => getDateTimeFromTimestamp(params.value),
+        width: 150,
+        valueFormatter: (params) => getDateTimeFromTimestamp(params.value),
         align: 'center',
         headerAlign: 'center',
       },
       {
         field: 'updated_at',
         headerName: 'Modifié le',
-        type: 'number',
-        width: 110,
-        editable: true,
-        valueFormatter: params => getDateTimeFromTimestamp(params.value),
+        width: 150,
+        valueFormatter: (params) => getDateTimeFromTimestamp(params.value),
         align: 'center',
         headerAlign: 'center',
       },
@@ -104,43 +141,56 @@ const Boxs = () => {
         width: 280,
         sortable: false,
         disableClickEventBubbling: true,
-        align: 'center',
-        headerAlign: 'center',
         renderCell: (params) => {
-          const onClick = (e) => {                
+          const onClick = (e) => {
             const currentRow = params.row;
-            setBoxInfo(currentRow);
+            setServiceInfo(currentRow);
             setOpen(true);
           };
-          const onDeleteClick = (e) => {                
+          const onDeleteClick = (e) => {
             const currentRow = params.row;
-            setBoxInfo(currentRow);
+            setServiceInfo(currentRow);
             setOpenDeleteDialogue(true);
           };
-          
+    
           return (
             <Stack direction="row" spacing={2}>
-              <Button variant="contained" color="warning" size="small" onClick={onClick}>Edit</Button>
-              <Button variant="contained" color="error" size="small" onClick={onDeleteClick}>Delete</Button>
+              <Button variant="contained" color="warning" size="small" onClick={onClick}>
+                Edit
+              </Button>
+              <Button variant="contained" color="error" size="small" onClick={onDeleteClick}>
+                Delete
+              </Button>
             </Stack>
           );
         },
-      }
+        align: 'center',
+        headerAlign: 'center',
+      },
     ];
 
+
     const [name, setName] = useState('');
+    const [reference, setReference] = useState('');
     const [type, setType] = useState('');
+    const [status, setStatus] = useState('');
 
   
   const handleNameChange = (event) => {
     setName(event.target.value);
     };
+    const handleReferanceChange = (event) => {
+      setReference(event.target.value);
+    };
     const handleTypeChange = (event) => {
       setType(event.target.value);
     };
-    const handleAddBox = () => {
-        if(name&&type){
-            addBox(name,type)}
+    const handleStatusChange = (event) => {
+      setStatus(event.target.value);
+    };
+    const handleAddService = () => {
+        if(name&&type&&type&&status){
+            addService(name,reference,type,status)}
             
     };
     const handleNextPage = () => {
@@ -184,24 +234,41 @@ const Boxs = () => {
       autoComplete="off"
     >
 
-  <TextField id="outlined-basic" label="Box name :" variant="outlined" fullWidth value={name} onChange={handleNameChange}/>
+  <TextField id="outlined-basic" label="Service name :" variant="outlined" fullWidth value={name} onChange={handleNameChange}/>
+  <TextField id="outlined-basic" label="Reference :" variant="outlined" fullWidth value={reference} onChange={handleReferanceChange}/>
     <FormControl fullWidth>
-    <InputLabel id="demo-simple-select-label">Type</InputLabel>
-    <Select
-        labelId="demo-simple-select-label"
-        id="demo-simple-select"
-        value={type}
-        label="Box"
-        onChange={handleTypeChange}
-    >
-        <MenuItem value={1} variant="contained">Type 1</MenuItem>
-        <MenuItem value={2} variant="contained">Type 2</MenuItem>
-    </Select>
+      <InputLabel id="demo-simple-select-label">Type</InputLabel>
+      <Select
+          labelId="demo-simple-select-label"
+          id="demo-simple-select"
+          value={type}
+          label="Service"
+          onChange={handleTypeChange}
+      >
+          <MenuItem value={1} variant="contained">Chien</MenuItem>
+          <MenuItem value={2} variant="contained">Chat</MenuItem>
+      </Select>
 
 
 
     </FormControl>
-    <Button variant="contained" color="success" fullWidth onClick={handleAddBox} size="large"  endIcon={<AddIcon />}>Ajouter la box</Button>
+    <FormControl fullWidth>
+      <InputLabel id="demo-simple-select-label">Status</InputLabel>
+      <Select
+          labelId="demo-simple-select-label"
+          id="demo-simple-select"
+          value={status}
+          label="Service"
+          onChange={handleStatusChange}
+      >
+          <MenuItem value={1} variant="contained">Active</MenuItem>
+          <MenuItem value={2} variant="contained">Desactive</MenuItem>
+      </Select>
+
+
+
+    </FormControl>
+    <Button variant="contained" color="success" fullWidth onClick={handleAddService} size="large"  endIcon={<AddIcon />}>Ajouter la service</Button>
 
 
     </Box>
@@ -213,7 +280,7 @@ const Boxs = () => {
         <Box sx={{ height: "100%", width: '100%' }}>
         <DataGrid
         onRowClick={handleRowClick}
-            rows={boxs.data}
+            rows={services.data}
             columns={columns}
             initialState={{
             pagination: {
@@ -223,13 +290,13 @@ const Boxs = () => {
             },
             }}
             // pageSizeOptions={[5]}
-            checkboxSelection
+            checkserviceSelection
             disableRowSelectionOnClick
         />
         </Box>
     </Stack>
       
-    {open && <BoxModal open={open} setOpen={setOpen} boxInfo={boxInfo} editBox={editBox} />}
+    {open && <ServiceModal open={open} setOpen={setOpen} serviceInfo={serviceInfo} editService={editService} />}
 
 
     {
@@ -240,15 +307,15 @@ const Boxs = () => {
         onClose={handleDeleteClose}
         aria-describedby="alert-dialog-slide-description"
       >
-        <DialogTitle>{"Suprimer la box !"}</DialogTitle>
+        <DialogTitle>{"Suprimer le service !"}</DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-slide-description">
-            Are you sure you want to delete this box
+            Are you sure you want to delete this service
           </DialogContentText>
         </DialogContent>
         <DialogActions>
           <Button onClick={handleDeleteClose} variant="contained" color="success" >No keep it</Button>
-          <Button onClick={()=>{deleteBox(boxInfo.id, setOpenDeleteDialogue)}}  variant="contained" color="error" >Yes Delete</Button>
+          <Button onClick={()=>{deleteService(serviceInfo.id, setOpenDeleteDialogue)}}  variant="contained" color="error" >Yes Delete</Button>
         </DialogActions>
       </Dialog>}
 
@@ -267,4 +334,4 @@ const Boxs = () => {
   );
 };
 
-export default Boxs;
+export default Services;

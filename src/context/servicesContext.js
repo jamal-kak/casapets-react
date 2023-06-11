@@ -1,100 +1,100 @@
 import React, { useState, createContext, useReducer, useEffect } from 'react';
 import axios from 'axios';
-import { BOX_API_URL } from '../UTILS/APIS';
+import { SERVICE_API_URL } from '../UTILS/APIS';
 
 import CustomSnackbar from '../scenes/global/snackbar'
 
 
 
 const initialState = {
-  boxs: [],
+  services: [],
   loading: true,
   error: null,
 };
 
-export const BoxsContext = createContext({
-  boxs: [],
+export const ServicesContext = createContext({
+  services: [],
   loading: true,
   error: null,
-  fetchBoxs: () => {},
+  fetchServices: () => {},
 });
 
 
-const boxsReducer = (state, action) => {
+const servicesReducer = (state, action) => {
   switch (action.type) {
-    case 'FETCH_BOXS_REQUEST':
+    case 'FETCH_SERVICES_REQUEST':
       return {
         ...state,
         loading: true,
         error: null,
       };
-    case 'FETCH_BOXS_SUCCESS':
+    case 'FETCH_SERVICES_SUCCESS':
       return {
         ...state,
-        boxs: action.payload,
+        services: action.payload,
         loading: false,
       };
-    case 'FETCH_BOXS_FAILURE':
+    case 'FETCH_SERVICES_FAILURE':
       return {
         ...state,
-        boxs: [],
+        services: [],
         loading: false,
         error: action.payload,
       };
-    case 'ADD_BOXS_REQUEST':
+    case 'ADD_SERVICES_REQUEST':
       return {
         ...state,
         loading: true,
         error: null,
       };
-    case 'ADD_BOXS_SUCCESS':
+    case 'ADD_SERVICES_SUCCESS':
       return {
         ...state,
-        boxs: action.payload,
+        services: action.payload,
         loading: false,
       };
-    case 'ADD_BOXS_FAILURE':
+    case 'ADD_SERVICES_FAILURE':
       return {
         ...state,
-        boxs: [],
+        services: [],
         loading: false,
         error: action.payload,
       };
-    case 'EDIT_BOXS_REQUEST':
+    case 'EDIT_SERVICES_REQUEST':
       return {
         ...state,
         loading: true,
         error: null,
       };
-    case 'EDIT_BOXS_SUCCESS':
+    case 'EDIT_SERVICES_SUCCESS':
       return {
         ...state,
-        boxs: action.payload,
+        services: action.payload,
         loading: false,
       };
-    case 'EDIT_BOXS_FAILURE':
+    case 'EDIT_SERVICES_FAILURE':
       return {
         ...state,
-        boxs: [],
+        services: [],
         loading: false,
         error: action.payload,
       };
-    case 'DELETE_BOXS_REQUEST':
+    case 'DELETE_SERVICES_REQUEST':
       return {
         ...state,
         loading: true,
         error: null,
       };
-    case 'DELETE_BOXS_SUCCESS':
+    case 'DELETE_SERVICES_SUCCESS':
       return {
         ...state,
-        boxs: action.payload,
+        services: action.payload,
         loading: false,
       };
-    case 'DELETE_BOXS_FAILURE':
+    case 'DELETE_SERVICES_FAILURE':
       return {
         ...state,
-        boxs: [],
+        services: [],
         loading: false,
         error: action.payload,
       };
@@ -103,109 +103,113 @@ const boxsReducer = (state, action) => {
   }
 };
 
-export const BoxsContextProvider = ({ children }) => {
-  const [state, dispatch] = useReducer(boxsReducer, initialState);
+export const ServicesContextProvider = ({ children }) => {
+  const [state, dispatch] = useReducer(servicesReducer, initialState);
 
-  const fetchBoxs = async (url) => {
-    dispatch({ type: 'FETCH_BOXS_REQUEST' });
+  const fetchServices = async (url) => {
+    dispatch({ type: 'FETCH_SERVICES_REQUEST' });
 
     const access_token = JSON.parse(localStorage.getItem('user'))['access_token'];
     axios.defaults.headers.common["Authorization"] = `Bearer ${access_token}`;
 
     try {
       const response = await axios.get(url);
-      dispatch({ type: 'FETCH_BOXS_SUCCESS', payload: response.data });
+      dispatch({ type: 'FETCH_SERVICES_SUCCESS', payload: response.data });
     } catch (error) {
-      dispatch({ type: 'FETCH_BOXS_FAILURE', payload: error.message });
+      dispatch({ type: 'FETCH_SERVICES_FAILURE', payload: error.message });
     }
   };
 
-  const addBox = async (boxName, boxType) => {
+  const addService = async (name,reference,type,status) => {
     
 
-    dispatch({ type: 'ADD_BOXS_REQUEST' });
+    dispatch({ type: 'ADD_SERVICES_REQUEST' });
 
     const access_token = JSON.parse(localStorage.getItem('user'))['access_token'];
     axios.defaults.headers.common["Authorization"] = `Bearer ${access_token}`;
 
-    const newBox = {
-      "libelle": boxName,
-      "type": boxType
-    }
+    const newService = {
+      "reference": reference,
+      "title": name,
+      "type_key": type,
+      "status_key": status
+  }
 
 
     try {
-      const response = await axios.post(BOX_API_URL, JSON.stringify(newBox), {
+      const response = await axios.post(SERVICE_API_URL, JSON.stringify(newService), {
         headers: { 'Content-Type': 'application/json' }
       });
-      fetchBoxs(BOX_API_URL);
-      handleSnackbar('Box added successfully', 'success');
+      fetchServices(SERVICE_API_URL);
+      handleSnackbar('Service added successfully', 'success');
     } catch (error) {
-      dispatch({ type: 'ADD_BOXS_FAILURE', payload: error.message });
-      handleSnackbar('Failed to add box', 'error');
+      dispatch({ type: 'ADD_SERVICES_FAILURE', payload: error.message });
+      handleSnackbar('Failed to add service', 'error');
       
     }
   };
-  const editBox = async (boxName, boxType,boxID , setOpen) => {
+  const editService = async (name,reference,type,status,serviceID , setOpen) => {
     
 
-    dispatch({ type: 'EDIT_BOXS_REQUEST' });
+    dispatch({ type: 'EDIT_SERVICES_REQUEST' });
 
     const access_token = JSON.parse(localStorage.getItem('user'))['access_token'];
     axios.defaults.headers.common["Authorization"] = `Bearer ${access_token}`;
 
-    const newBox = {
-      "libelle": boxName,
-      "type": boxType
-    }
+    const newService = {
+      "reference": reference,
+      "title": name,
+      "type_key": type,
+      "status_key": status
+  }
 
-    console.log(newBox);
+    console.log(newService);
 
     try {
-      const response = await axios.patch(BOX_API_URL+boxID, JSON.stringify(newBox), {
+      const response = await axios.patch(SERVICE_API_URL+serviceID, JSON.stringify(newService), {
         headers: { 'Content-Type': 'application/json' }
       });
-      fetchBoxs(BOX_API_URL);
-      handleSnackbar('Box edited successfully', 'success');
+      fetchServices(SERVICE_API_URL);
+      handleSnackbar('Service edited successfully', 'success');
       setOpen(false);
     } catch (error) {
-      dispatch({ type: 'EDIT_BOXS_FAILURE', payload: error.message });
-      handleSnackbar('Failed to edit the box', 'error');
+      dispatch({ type: 'EDIT_SERVICES_FAILURE', payload: error.message });
+      handleSnackbar('Failed to edit the service', 'error');
 
     }
   };
-  const deleteBox = async (boxID, setOpenDeleteDialogue) => {
+  const deleteService = async (serviceID, setOpenDeleteDialogue) => {
     
 
-    dispatch({ type: 'DELETE_BOXS_REQUEST' });
+    dispatch({ type: 'DELETE_SERVICES_REQUEST' });
 
     const access_token = JSON.parse(localStorage.getItem('user'))['access_token'];
     axios.defaults.headers.common["Authorization"] = `Bearer ${access_token}`;
 
 
     try {
-      const response = await axios.delete(BOX_API_URL+boxID);
-      fetchBoxs(BOX_API_URL);
+      const response = await axios.delete(SERVICE_API_URL+serviceID);
+      fetchServices(SERVICE_API_URL);
       setOpenDeleteDialogue(false);
-      handleSnackbar('Box deleted successfully', 'success');
+      handleSnackbar('Service deleted successfully', 'success');
 
     } catch (error) {
-      dispatch({ type: 'DELETE_BOXS_FAILURE', payload: error.message });
-      handleSnackbar('Failed to delete box', 'error');
+      dispatch({ type: 'DELETE_SERVICES_FAILURE', payload: error.message });
+      handleSnackbar('Failed to delete service', 'error');
 
     }
   };
 
   const nextPage = () => {
-    fetchBoxs(state.boxs.next);
+    fetchServices(state.services.next);
   };
 
   const prevPage = () => {
-    fetchBoxs(state.boxs.prev);
+    fetchServices(state.services.prev);
   };
 
   useEffect(() => {
-    fetchBoxs(BOX_API_URL); // Call fetchBoxs on component mount
+    fetchServices(SERVICE_API_URL); // Call fetchServices on component mount
   }, []);
 
 
@@ -226,15 +230,15 @@ export const BoxsContextProvider = ({ children }) => {
 
 
   return (
-    <BoxsContext.Provider
+    <ServicesContext.Provider
       value={{
-        boxs: state.boxs,
+        services: state.services,
         loading: state.loading,
         error: state.error,
-        fetchBoxs: fetchBoxs,
-        addBox: addBox,
-        editBox:editBox,
-        deleteBox:deleteBox,
+        fetchServices: fetchServices,
+        addService: addService,
+        editService:editService,
+        deleteService:deleteService,
         nextPage: nextPage,
         prevPage: prevPage,
         
@@ -247,6 +251,6 @@ export const BoxsContextProvider = ({ children }) => {
         severity={snackbarSeverity}
         handleClose={handleSnackbarClose}
       />
-    </BoxsContext.Provider>
+    </ServicesContext.Provider>
   );
 };

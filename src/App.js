@@ -20,6 +20,7 @@ import { ColorModeContext, useMode } from "./theme";
 import { useAuthContext } from "./hooks/useAuthContext";
 import Races from "./scenes/races";
 import Boxs from "./scenes/boxs";
+import Services from "./scenes/services";
 
 
 function App() {
@@ -52,6 +53,10 @@ function App() {
               <Route
                 path="/boxs"
                 element={user ? <Boxs /> : <Navigate to="/login" />}
+              />
+              <Route
+                path="/services"
+                element={user ? <Services /> : <Navigate to="/login" />}
               />
               <Route
                 path="/login"

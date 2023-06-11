@@ -46,10 +46,10 @@ const Races = () => {
 
     console.log("ttttttt",races);
     
-      useEffect(() => {
-        // console.log("ttttttt",races);
-        fetchRaces(RACES_API_URL);
-      }, []);
+      // useEffect(() => {
+      //   // console.log("ttttttt",races);
+      //   fetchRaces(RACES_API_URL);
+      // }, []);
 
       const options = { year: "numeric", month: "long", day: "numeric"}
       function getDateTimeFromTimestamp(unixTimeStamp) {
@@ -58,56 +58,62 @@ const Races = () => {
     }
   
     const columns = [
-        { field: 'id', headerName: 'ID', width: 90 },
-        {
-          field: 'name',
-          headerName: 'name',
-          width: 150,
-          editable: true,
+      { field: 'id', headerName: 'ID', width: 90, align: 'center', headerAlign: 'center' },
+      { field: 'name', headerName: 'Name', width: 250, align: 'center', headerAlign: 'center', editable: true },
+      { field: 'type', headerName: 'Race type', width: 150, align: 'center', headerAlign: 'center', editable: true },
+      {
+        field: 'created_at',
+        headerName: 'Ajouté le',
+        type: 'number',
+        width: 110,
+        align: 'center',
+        headerAlign: 'center',
+        editable: true,
+        valueFormatter: (params) => getDateTimeFromTimestamp(params.value),
+      },
+      {
+        field: 'updated_at',
+        headerName: 'Modifié le',
+        type: 'number',
+        width: 110,
+        align: 'center',
+        headerAlign: 'center',
+        editable: true,
+        valueFormatter: (params) => getDateTimeFromTimestamp(params.value),
+      },
+      {
+        field: 'action',
+        headerName: 'Action',
+        width: 280,
+        sortable: false,
+        disableClickEventBubbling: true,
+        renderCell: (params) => {
+          const onClick = (e) => {
+            const currentRow = params.row;
+            setRaceInfo(currentRow);
+            setOpen(true);
+          };
+          const onDeleteClick = (e) => {
+            const currentRow = params.row;
+            setRaceInfo(currentRow);
+            setOpenDeleteDialogue(true);
+          };
+    
+          return (
+            <Stack direction="row" spacing={2}>
+              <Button variant="contained" color="warning" size="small" onClick={onClick}>
+                Edit
+              </Button>
+              <Button variant="contained" color="error" size="small" onClick={onDeleteClick}>
+                Delete
+              </Button>
+            </Stack>
+          );
         },
-        {
-          field: 'type',
-          headerName: 'Race type',
-          width: 150,
-          editable: true,
-        },
-        {
-          field: 'updated_at',
-          headerName: 'Ajouté le',
-          type: 'number',
-          width: 110,
-          editable: true,
-          valueFormatter: params => getDateTimeFromTimestamp(params.value)
-        },
-        {
-          field: 'action',
-          headerName: 'Action',
-          width: 280,
-          sortable: false,
-          disableClickEventBubbling: true,
-          
-          renderCell: (params) => {
-              const onClick = (e) => {                
-                const currentRow = params.row;
-                setRaceInfo(currentRow);
-                setOpen(true);
-              };
-              const onDeleteClick = (e) => {                
-                const currentRow = params.row;
-                setRaceInfo(currentRow);
-                setOpenDeleteDialogue(true);
-              };
-              
-              return (
-                <Stack direction="row" spacing={2}>
-                  <Button variant="contained" color="warning" size="small" onClick={onClick}>Edit</Button>
-                  <Button variant="contained" color="error" size="small" onClick={onDeleteClick}>Delete</Button>
-                </Stack>
-              );
-          },
-        }
-        
-      ];
+        align: 'center',
+        headerAlign: 'center',
+      },
+    ];
 
     const [name, setName] = useState('');
     const [type, setType] = useState('');
@@ -117,7 +123,7 @@ const Races = () => {
     setName(event.target.value);
     };
     const handleTypeChange = (event) => {
-      setOpenDeleteDialogue(event.target.value);
+      setType(event.target.value);
     };
     const handleAddRace = () => {
         if(name&&type){
@@ -221,7 +227,7 @@ const Races = () => {
         onClose={handleDeleteClose}
         aria-describedby="alert-dialog-slide-description"
       >
-        <DialogTitle>{"Use Google's location service?"}</DialogTitle>
+        <DialogTitle>{"Suprimer la race !"}</DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-slide-description">
             Are you sure you want to delete this race
