@@ -7,7 +7,6 @@ import { tokens } from "../../theme";
 import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
 import PeopleOutlinedIcon from "@mui/icons-material/PeopleOutlined";
 import ContactsOutlinedIcon from "@mui/icons-material/ContactsOutlined";
-import ReceiptOutlinedIcon from "@mui/icons-material/ReceiptOutlined";
 import PersonOutlinedIcon from "@mui/icons-material/PersonOutlined";
 import CalendarTodayOutlinedIcon from "@mui/icons-material/CalendarTodayOutlined";
 import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
@@ -16,6 +15,7 @@ import PieChartOutlineOutlinedIcon from "@mui/icons-material/PieChartOutlineOutl
 import TimelineOutlinedIcon from "@mui/icons-material/TimelineOutlined";
 import MenuOutlinedIcon from "@mui/icons-material/MenuOutlined";
 import MapOutlinedIcon from "@mui/icons-material/MapOutlined";
+import LocalHospitalIcon from "@mui/icons-material/LocalHospital";
 import PetsIcon from "@mui/icons-material/Pets";
 
 import { useAuthContext } from "../../hooks/useAuthContext";
@@ -23,6 +23,7 @@ import { useAuthContext } from "../../hooks/useAuthContext";
 const Item = ({ title, to, icon, selected, setSelected }) => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
+
   return (
     <MenuItem
       active={selected === title}
@@ -105,7 +106,11 @@ const Sidebar = () => {
                   {user?.user?.name}
                 </Typography>
                 <Typography variant="h5" color={colors.greenAccent[500]}>
-                  VP Fancy Admin
+                  {user?.user?.role_id === 1
+                    ? "Admin"
+                    : user?.user?.role_id === 2
+                    ? "Vétérinaire"
+                    : "Réceptionniste"}
                 </Typography>
               </Box>
             </Box>
@@ -127,24 +132,36 @@ const Sidebar = () => {
             >
               Data
             </Typography>
+            {user?.user?.role_id === 1 && (
+              <Item
+                title="Users"
+                to="/users"
+                icon={<PeopleOutlinedIcon />}
+                selected={selected}
+                setSelected={setSelected}
+              />
+            )}
+
+            {user?.user?.role_id !== 2 && (
+              <Item
+                title="Vétérinaires"
+                to="/vet"
+                icon={<LocalHospitalIcon />}
+                selected={selected}
+                setSelected={setSelected}
+              />
+            )}
             <Item
-              title="Manage Team"
-              to="/team"
-              icon={<PeopleOutlinedIcon />}
-              selected={selected}
-              setSelected={setSelected}
-            />
-            <Item
-              title="Contacts Information"
-              to="/contacts"
+              title="Clients"
+              to="/clients"
               icon={<ContactsOutlinedIcon />}
               selected={selected}
               setSelected={setSelected}
             />
             <Item
-              title="Invoices Balances"
-              to="/invoices"
-              icon={<ReceiptOutlinedIcon />}
+              title="Pets"
+              to="/pets"
+              icon={<PetsIcon />}
               selected={selected}
               setSelected={setSelected}
             />

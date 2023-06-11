@@ -4,23 +4,22 @@ import Topbar from "./scenes/global/Topbar";
 import Sidebar from "./scenes/global/Sidebar";
 import Dashboard from "./scenes/dashboard";
 import SignIn from "./scenes/signIn/Signin";
-// import Team from "./scenes/team";
-// import Invoices from "./scenes/invoices";
-// import Contacts from "./scenes/contacts";
-// import Bar from "./scenes/bar";
-// import Form from "./scenes/form";
-// import Line from "./scenes/line";
-// import Pie from "./scenes/pie";
-// import FAQ from "./scenes/faq";
-// import Geography from "./scenes/geography";
-// import Calendar from "./scenes/calendar/calendar";
+import Users from "./scenes/users";
+import Clients from "./scenes/clients";
+import Pets from "./scenes/pets";
+
 import { CssBaseline, ThemeProvider } from "@mui/material";
 import { ColorModeContext, useMode } from "./theme";
 
 import { useAuthContext } from "./hooks/useAuthContext";
+import FormUser from "./scenes/users/FormUser";
+import FormClient from "./scenes/clients/FormClient";
+import FormPet from "./scenes/pets/FormPets";
+import Vets from "./scenes/veterinaire";
+import FormVet from "./scenes/veterinaire/FormVet";
 
 function App() {
-  const { user } = useAuthContext();
+  const { user, isLoading } = useAuthContext();
   const [theme, colorMode] = useMode();
   const [isSidebar, setIsSidebar] = useState(true);
   const location = useLocation();
@@ -32,33 +31,129 @@ function App() {
     <ColorModeContext.Provider value={colorMode}>
       <ThemeProvider theme={theme}>
         <CssBaseline />
-        <div className="app">
-          {!isLoginPage && <Sidebar isSidebar={isSidebar} />}
-          <main className="content">
-            {!isLoginPage && <Topbar setIsSidebar={setIsSidebar} />}
-            <Routes>
-              <Route
-                path="/"
-                element={user ? <Dashboard /> : <Navigate to="/login" />}
-              />
-              <Route
-                path="/login"
-                element={!user ? <SignIn /> : <Navigate to="/" />}
-              />
+        {!isLoading && (
+          <div className="app">
+            {!isLoginPage && <Sidebar isSidebar={isSidebar} />}
+            <main className="content">
+              {!isLoginPage && <Topbar setIsSidebar={setIsSidebar} />}
+              <Routes>
+                <Route
+                  path="/"
+                  element={user ? <Dashboard /> : <Navigate to="/login" />}
+                />
+                <Route
+                  path="/login"
+                  element={!user ? <SignIn /> : <Navigate to="/" />}
+                />
+                <Route
+                  path="/users"
+                  element={
+                    user && user?.user?.role_id === 1 ? (
+                      <Users />
+                    ) : (
+                      <Navigate to="/login" />
+                    )
+                  }
+                />
+                <Route
+                  path="/add-user"
+                  element={
+                    user && user?.user?.role_id === 1 ? (
+                      <FormUser />
+                    ) : (
+                      <Navigate to="/login" />
+                    )
+                  }
+                />
+                <Route
+                  path="/clients"
+                  element={user ? <Clients /> : <Navigate to="/login" />}
+                />
 
-              {/* <Route path="/team" element={<Team />} /> */}
-              {/* <Route path="/contacts" element={<Contacts />} /> */}
-              {/* <Route path="/invoices" element={<Invoices />} /> */}
-              {/* <Route path="/form" element={<Form />} /> */}
-              {/* <Route path="/bar" element={<Bar />} /> */}
-              {/* <Route path="/pie" element={<Pie />} /> */}
-              {/* <Route path="/line" element={<Line />} /> */}
-              {/* <Route path="/faq" element={<FAQ />} /> */}
-              {/* <Route path="/calendar" element={<Calendar />} /> */}
-              {/* <Route path="/geography" element={<Geography />} /> */}
-            </Routes>
-          </main>
-        </div>
+                <Route
+                  path="/clients/add-client"
+                  element={
+                    user && user?.user?.role_id !== 2 ? (
+                      <FormClient />
+                    ) : (
+                      <Navigate to="/login" />
+                    )
+                  }
+                />
+
+                <Route
+                  path="/clients/update-client/:id"
+                  element={
+                    user && user?.user?.role_id !== 2 ? (
+                      <FormClient />
+                    ) : (
+                      <Navigate to="/login" />
+                    )
+                  }
+                />
+                <Route
+                  path="/pets"
+                  element={user ? <Pets /> : <Navigate to="/login" />}
+                />
+
+                <Route
+                  path="/pets/add-pet"
+                  element={
+                    user && user?.user?.role_id !== 2 ? (
+                      <FormPet />
+                    ) : (
+                      <Navigate to="/login" />
+                    )
+                  }
+                />
+
+                <Route
+                  path="/pets/update-pet/:id"
+                  element={
+                    user && user?.user?.role_id !== 2 ? (
+                      <FormPet />
+                    ) : (
+                      <Navigate to="/login" />
+                    )
+                  }
+                />
+
+                <Route
+                  path="/vet"
+                  element={
+                    user && user?.user?.role_id !== 2 ? (
+                      <Vets />
+                    ) : (
+                      <Navigate to="/login" />
+                    )
+                  }
+                />
+
+                <Route
+                  path="/vet/add-vet"
+                  element={
+                    user && user?.user?.role_id !== 2 ? (
+                      <FormVet />
+                    ) : (
+                      <Navigate to="/login" />
+                    )
+                  }
+                />
+
+                <Route
+                  path="/vet/update-vet/:id"
+                  element={
+                    user && user?.user?.role_id !== 2 ? (
+                      <FormVet />
+                    ) : (
+                      <Navigate to="/login" />
+                    )
+                  }
+                />
+              </Routes>
+            </main>
+          </div>
+        )}
       </ThemeProvider>
     </ColorModeContext.Provider>
   );

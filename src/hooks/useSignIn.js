@@ -21,7 +21,7 @@ export const useSignIn = () => {
       setIsLoading(false);
     } catch (error) {
       setIsLoading(false);
-      setError(error);
+      setError(error.response.data.errors.email[0]);
     }
   };
 
