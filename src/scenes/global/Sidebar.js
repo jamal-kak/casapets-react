@@ -134,6 +134,7 @@ const Sidebar = () => {
             >
               Data
             </Typography>
+
             {user?.user?.role_id === 1 && (
               <Item
                 title="Users"
@@ -156,6 +157,7 @@ const Sidebar = () => {
             <Item
               title="Clients"
               to="/clients"
+
               icon={<ContactsOutlinedIcon />}
               selected={selected}
               setSelected={setSelected}

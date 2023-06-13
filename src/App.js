@@ -12,6 +12,7 @@ import { CssBaseline, ThemeProvider } from "@mui/material";
 import { ColorModeContext, useMode } from "./theme";
 
 import { useAuthContext } from "./hooks/useAuthContext";
+
 import FormUser from "./scenes/users/FormUser";
 import FormClient from "./scenes/clients/FormClient";
 import FormPet from "./scenes/pets/FormPets";
@@ -26,6 +27,7 @@ import FormService from "./scenes/service/FormService";
 import Tarifs from "./scenes/tarif";
 import FormTarif from "./scenes/tarif/FormTarif";
 
+
 function App() {
   const { user, isLoading } = useAuthContext();
   const [theme, colorMode] = useMode();
@@ -39,6 +41,7 @@ function App() {
     <ColorModeContext.Provider value={colorMode}>
       <ThemeProvider theme={theme}>
         <CssBaseline />
+
         {!isLoading && (
           <div className="app">
             {!isLoginPage && <Sidebar isSidebar={isSidebar} />}
@@ -246,6 +249,7 @@ function App() {
             </main>
           </div>
         )}
+
       </ThemeProvider>
     </ColorModeContext.Provider>
   );
