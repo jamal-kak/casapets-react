@@ -7,7 +7,7 @@ const Dashboard = () => {
   useEffect(() => {
     setTimeout(() => {
       setLoading(false);
-    }, 1000);
+    }, 6000);
   }, []);
 
   return (
