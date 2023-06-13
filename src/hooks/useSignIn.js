@@ -1,18 +1,18 @@
 import { useState } from "react";
 import { useAuthContext } from "./useAuthContext";
 import axios from "axios";
+import { LOGIN_API_URL } from "../utils/APIS";
 
 export const useSignIn = () => {
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(null);
   const { dispatch } = useAuthContext();
-  const Url = "http://127.0.0.1:8000/api";
   const signin = async (email, password) => {
     setIsLoading(true);
     setError(null);
 
     try {
-      const response = await axios.post(`${Url}/login`, { email, password });
+      const response = await axios.post(LOGIN_API_URL, { email, password });
       // save the user to local storage
       localStorage.setItem("user", JSON.stringify(response.data));
 
@@ -21,7 +21,7 @@ export const useSignIn = () => {
       setIsLoading(false);
     } catch (error) {
       setIsLoading(false);
-      setError(error);
+      setError(error.response.data.errors.email[0]);
     }
   };
 

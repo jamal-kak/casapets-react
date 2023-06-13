@@ -3,21 +3,20 @@ import ReactDOM from "react-dom/client";
 import "./index.css";
 import App from "./App";
 import { BrowserRouter } from "react-router-dom";
-import { AuthContextProvider } from "./context/authContext";
-import { RacesContextProvider } from "./context/racesContext";
-import { BoxsContextProvider } from "./context/boxsContext";
+
+
+import { AppContextProvider } from "./context/AppContextProvider";
+
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
-    <AuthContextProvider>
-      <RacesContextProvider>
-      <BoxsContextProvider>
-          <BrowserRouter>
-            <App />
-          </BrowserRouter>
-        </BoxsContextProvider>
-      </RacesContextProvider>
-    </AuthContextProvider>
+
+    <AppContextProvider>
+      <BrowserRouter>
+        <App />
+      </BrowserRouter>
+    </AppContextProvider>
+
   </React.StrictMode>
 );

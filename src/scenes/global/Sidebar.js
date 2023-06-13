@@ -7,15 +7,17 @@ import { tokens } from "../../theme";
 import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
 import PeopleOutlinedIcon from "@mui/icons-material/PeopleOutlined";
 import ContactsOutlinedIcon from "@mui/icons-material/ContactsOutlined";
-import ReceiptOutlinedIcon from "@mui/icons-material/ReceiptOutlined";
-import PersonOutlinedIcon from "@mui/icons-material/PersonOutlined";
-import CalendarTodayOutlinedIcon from "@mui/icons-material/CalendarTodayOutlined";
-import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
+import MedicalServicesIcon from "@mui/icons-material/MedicalServices";
+import SellIcon from "@mui/icons-material/Sell";
+import InventoryIcon from "@mui/icons-material/Inventory";
 import BarChartOutlinedIcon from "@mui/icons-material/BarChartOutlined";
 import PieChartOutlineOutlinedIcon from "@mui/icons-material/PieChartOutlineOutlined";
+import CallSplitIcon from "@mui/icons-material/CallSplit";
 import TimelineOutlinedIcon from "@mui/icons-material/TimelineOutlined";
+import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import MenuOutlinedIcon from "@mui/icons-material/MenuOutlined";
 import MapOutlinedIcon from "@mui/icons-material/MapOutlined";
+import LocalHospitalIcon from "@mui/icons-material/LocalHospital";
 import PetsIcon from "@mui/icons-material/Pets";
 
 import { useAuthContext } from "../../hooks/useAuthContext";
@@ -23,6 +25,7 @@ import { useAuthContext } from "../../hooks/useAuthContext";
 const Item = ({ title, to, icon, selected, setSelected }) => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
+
   return (
     <MenuItem
       active={selected === title}
@@ -105,7 +108,11 @@ const Sidebar = () => {
                   {user?.user?.name}
                 </Typography>
                 <Typography variant="h5" color={colors.greenAccent[500]}>
-                  VP Fancy Admin
+                  {user?.user?.role_id === 1
+                    ? "Admin"
+                    : user?.user?.role_id === 2
+                    ? "Vétérinaire"
+                    : "Réceptionniste"}
                 </Typography>
               </Box>
             </Box>
@@ -127,32 +134,38 @@ const Sidebar = () => {
             >
               Data
             </Typography>
-           
+
+            {user?.user?.role_id === 1 && (
+              <Item
+                title="Users"
+                to="/users"
+                icon={<PeopleOutlinedIcon />}
+                selected={selected}
+                setSelected={setSelected}
+              />
+            )}
+
+            {user?.user?.role_id !== 2 && (
+              <Item
+                title="Vétérinaires"
+                to="/vet"
+                icon={<LocalHospitalIcon />}
+                selected={selected}
+                setSelected={setSelected}
+              />
+            )}
             <Item
-              title="Manage Races"
-              to="/races"
-              icon={<PeopleOutlinedIcon />}
-              selected={selected}
-              setSelected={setSelected}
-            />
-            <Item
-              title="Manage Boxs"
-              to="/boxs"
-              icon={<PeopleOutlinedIcon />}
-              selected={selected}
-              setSelected={setSelected}
-            />
-            <Item
-              title="Contacts Information"
-              to="/contacts"
+              title="Clients"
+              to="/clients"
+
               icon={<ContactsOutlinedIcon />}
               selected={selected}
               setSelected={setSelected}
             />
             <Item
-              title="Invoices Balances"
-              to="/invoices"
-              icon={<ReceiptOutlinedIcon />}
+              title="Pets"
+              to="/pets"
+              icon={<PetsIcon />}
               selected={selected}
               setSelected={setSelected}
             />
@@ -162,26 +175,42 @@ const Sidebar = () => {
               color={colors.grey[300]}
               sx={{ m: "15px 0 5px 20px" }}
             >
-              Pages
+              Résérvation
             </Typography>
             <Item
-              title="Profile Form"
+              title="Rendez-vous"
               to="/form"
-              icon={<PersonOutlinedIcon />}
+              icon={<CalendarMonthIcon />}
               selected={selected}
               setSelected={setSelected}
             />
             <Item
-              title="Calendar"
-              to="/calendar"
-              icon={<CalendarTodayOutlinedIcon />}
+              title="Services"
+              to="/services"
+              icon={<MedicalServicesIcon />}
               selected={selected}
               setSelected={setSelected}
             />
             <Item
-              title="FAQ Page"
-              to="/faq"
-              icon={<HelpOutlineOutlinedIcon />}
+              title="Tarifs"
+              to="/tarifs"
+              icon={<SellIcon />}
+              selected={selected}
+              setSelected={setSelected}
+            />
+
+            <Item
+              title="Boxs"
+              to="/boxs"
+              icon={<InventoryIcon />}
+              selected={selected}
+              setSelected={setSelected}
+            />
+
+            <Item
+              title="Races"
+              to="/races"
+              icon={<CallSplitIcon />}
               selected={selected}
               setSelected={setSelected}
             />

@@ -147,7 +147,7 @@ export default function SignIn() {
             {error && (
               <Alert severity="error">
                 <AlertTitle>Error</AlertTitle>
-                {error.message}
+                {error}
               </Alert>
             )}
           </Box>
