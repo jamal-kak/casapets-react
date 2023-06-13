@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useVetContext } from "./useVetContext";
 import axios from "axios";
+import { VET_API_URL } from "../../utils/APIS";
 
 export const useListVet = () => {
   const [errorListVet, setErrorListVet] = useState(null);
@@ -14,7 +15,7 @@ export const useListVet = () => {
     setErrorListVet(null);
 
     try {
-      const response = await axios.get(`${Url}/veterinaires`);
+      const response = await axios.get(VET_API_URL);
       console.log(response.data);
       // update the Vet Context
       await dispatch({ type: "AFFICHER", payload: response.data });

@@ -1,12 +1,12 @@
 import { useState } from "react";
 import { useUserContext } from "./useUserContext";
 import axios from "axios";
+import { REGISTER_API_URL } from "../../utils/APIS";
 
 export const useAddUser = () => {
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(null);
   const { dispatch } = useUserContext();
-  const Url = "http://127.0.0.1:8000/api";
   const { access_token } = JSON.parse(localStorage.getItem("user"));
   axios.defaults.headers.common["Authorization"] = `Bearer ${access_token}`;
   const addUser = async (values) => {
@@ -14,7 +14,7 @@ export const useAddUser = () => {
     setError(null);
 
     try {
-      const response = await axios.post(`${Url}/register`, values);
+      const response = await axios.post(REGISTER_API_URL, values);
       console.log(response.data);
       // update the Auth Context
       await dispatch({ type: "AJOUTER", payload: response.data });

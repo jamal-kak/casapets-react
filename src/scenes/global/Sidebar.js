@@ -7,12 +7,14 @@ import { tokens } from "../../theme";
 import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
 import PeopleOutlinedIcon from "@mui/icons-material/PeopleOutlined";
 import ContactsOutlinedIcon from "@mui/icons-material/ContactsOutlined";
-import PersonOutlinedIcon from "@mui/icons-material/PersonOutlined";
-import CalendarTodayOutlinedIcon from "@mui/icons-material/CalendarTodayOutlined";
-import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
+import MedicalServicesIcon from "@mui/icons-material/MedicalServices";
+import SellIcon from "@mui/icons-material/Sell";
+import InventoryIcon from "@mui/icons-material/Inventory";
 import BarChartOutlinedIcon from "@mui/icons-material/BarChartOutlined";
 import PieChartOutlineOutlinedIcon from "@mui/icons-material/PieChartOutlineOutlined";
+import CallSplitIcon from "@mui/icons-material/CallSplit";
 import TimelineOutlinedIcon from "@mui/icons-material/TimelineOutlined";
+import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import MenuOutlinedIcon from "@mui/icons-material/MenuOutlined";
 import MapOutlinedIcon from "@mui/icons-material/MapOutlined";
 import LocalHospitalIcon from "@mui/icons-material/LocalHospital";
@@ -171,26 +173,42 @@ const Sidebar = () => {
               color={colors.grey[300]}
               sx={{ m: "15px 0 5px 20px" }}
             >
-              Pages
+              Résérvation
             </Typography>
             <Item
-              title="Profile Form"
+              title="Rendez-vous"
               to="/form"
-              icon={<PersonOutlinedIcon />}
+              icon={<CalendarMonthIcon />}
               selected={selected}
               setSelected={setSelected}
             />
             <Item
-              title="Calendar"
-              to="/calendar"
-              icon={<CalendarTodayOutlinedIcon />}
+              title="Services"
+              to="/services"
+              icon={<MedicalServicesIcon />}
               selected={selected}
               setSelected={setSelected}
             />
             <Item
-              title="FAQ Page"
-              to="/faq"
-              icon={<HelpOutlineOutlinedIcon />}
+              title="Tarifs"
+              to="/tarifs"
+              icon={<SellIcon />}
+              selected={selected}
+              setSelected={setSelected}
+            />
+
+            <Item
+              title="Boxs"
+              to="/boxs"
+              icon={<InventoryIcon />}
+              selected={selected}
+              setSelected={setSelected}
+            />
+
+            <Item
+              title="Races"
+              to="/races"
+              icon={<CallSplitIcon />}
               selected={selected}
               setSelected={setSelected}
             />

@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { usePetsContext } from "./usePetsContext";
 import axios from "axios";
+import { PETS_API_URL } from "../../utils/APIS";
 
 export const useUpdatePet = () => {
   const [isLoadingUpdatePet, setIsLoadingUpdatePet] = useState(null);
@@ -12,7 +13,7 @@ export const useUpdatePet = () => {
     setIsLoadingUpdatePet(true);
 
     try {
-      const response = await axios.post(`${Url}/pets`, values, {
+      const response = await axios.post(PETS_API_URL, values, {
         headers: { "Content-Type": "multipart/form-data" },
       });
       console.log(response);
