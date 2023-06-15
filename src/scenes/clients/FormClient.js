@@ -1,40 +1,35 @@
-// React Lib
-import { useEffect } from "react";
-import { useNavigate, useParams } from "react-router-dom";
-
 // Mui Lib
-import { Box, Button, TextField, LinearProgress } from "@mui/material";
+import { Box, Button, LinearProgress, useTheme } from "@mui/material";
 import useMediaQuery from "@mui/material/useMediaQuery";
+
+// Mui Dialog
+import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
+import DialogContentText from "@mui/material/DialogContentText";
+import DialogTitle from "@mui/material/DialogTitle";
 
 // Formik Lib
 import { Formik } from "formik";
 import * as yup from "yup";
 
 // Context
-import { useClientContext } from "../../hooks/clients/useClientContext";
 import { useAddClient } from "../../hooks/clients/useAddClient";
-import { useFindClient } from "../../hooks/clients/useFindClient";
 import { useUpdateClient } from "../../hooks/clients/useUpdateClient";
 
 // Components
-import { Header, InputText, ErrorMessage } from "../../components";
+import { InputText } from "../../components";
 
-const FormClient = () => {
+// Mui Theme
+import { tokens } from "../../theme";
+
+const FormClient = ({ open, close, data, setRequestSend }) => {
   const isNonMobile = useMediaQuery("(min-width:600px)");
+  const theme = useTheme();
+  const colors = tokens(theme.palette.mode);
 
-  const { client } = useClientContext();
   const { addClient, isLoading } = useAddClient();
-  const { findClient, isLoadingFindClient } = useFindClient();
   const { updateClient, isLoadingUpdateClient } = useUpdateClient();
-
-  const navigate = useNavigate();
-  const { id } = useParams();
-
-  useEffect(() => {
-    if (id) {
-      findClient(id);
-    }
-  }, []);
 
   const checkoutSchema = yup.object().shape({
     full_name: yup.string().required("Nom & Prénom est Obligatoire"),
@@ -46,39 +41,43 @@ const FormClient = () => {
     adresse: yup.string().required("Adresse est Obligatoire"),
   });
   const initialValues = {
-    full_name: client?.data?.full_name || "",
-    email: client?.data?.email || "",
-    phone: client?.data?.phone || "",
-    adresse: client?.data?.adresse || "",
+    full_name: data?.full_name || "",
+    email: data?.email || "",
+    phone: data?.phone || "",
+    adresse: data?.adresse || "",
   };
 
   const handleFormSubmit = async (values) => {
-    if (!id) {
+    if (!data) {
       await addClient(values);
     } else {
-      await updateClient(id, values);
+      await updateClient(data.id, values);
     }
-    navigate("/clients");
+    close();
+    setRequestSend((prev) => !prev);
   };
 
   return (
-    <>
-      {isLoadingFindClient ? (
-        <LinearProgress color="secondary" />
-      ) : (
+    <Dialog
+      open={open}
+      onClose={close}
+      aria-labelledby="alert-dialog-title"
+      aria-describedby="alert-dialog-description"
+      sx={{ borderRadius: 28 }}
+    >
+      <DialogTitle
+        id="alert-dialog-title"
+        fontSize={20}
+        sx={{ backgroundColor: colors.blueAccent[700] }}
+      >
+        {!data ? "Ajouter Client" : "Modifier Client"}
+      </DialogTitle>
+      <DialogContent sx={{ backgroundColor: colors.primary[400] }}>
         <>
           {(isLoading || isLoadingUpdateClient) && (
             <LinearProgress color="secondary" />
           )}
-          {client?.message && <ErrorMessage message={client?.message} />}
           <Box m="20px">
-            <Header
-              title={id ? "MODIFIER CLIENT" : "AJOUTER CLIENT"}
-              subtitle={
-                id ? "Modifier un nouveau Client" : "Ajouter un nouveau Client"
-              }
-            />
-
             <Formik
               onSubmit={handleFormSubmit}
               initialValues={initialValues}
@@ -157,8 +156,13 @@ const FormClient = () => {
             </Formik>
           </Box>
         </>
-      )}
-    </>
+      </DialogContent>
+      <DialogActions sx={{ backgroundColor: colors.blueAccent[700] }}>
+        <Button color="warning" variant="contained" onClick={close}>
+          Annuler
+        </Button>
+      </DialogActions>
+    </Dialog>
   );
 };
 

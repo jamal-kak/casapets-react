@@ -33,6 +33,7 @@ import { useDeletePet } from "../../hooks/pets/useDeletePet";
 
 // Scenes
 import InfoPet from "./InfoPet";
+import FormPets from "./FormPets";
 
 const Pets = () => {
   const theme = useTheme();
@@ -50,17 +51,24 @@ const Pets = () => {
   });
   const [openPetInfo, setOpenPetInfo] = useState(false);
   const [petDetail, setPetDetail] = useState({});
+  const [openPetForm, setOpenPetForm] = useState(false);
 
   const navigate = useNavigate();
 
-  const handleClickOpen = (data) => {
+  const handleClickOpen = (data, typeForm) => {
     setPetDetail(data);
-    setOpenPetInfo(true);
+    if (typeForm === "Info") {
+      setOpenPetInfo(true);
+    } else if (typeForm === "Form") {
+      console.log("hh");
+      setOpenPetForm(true);
+    }
   };
 
   const handleClose = () => {
     setPetDetail(null);
     setOpenPetInfo(false);
+    setOpenPetForm(false);
   };
 
   const handleList = async () => {
@@ -78,11 +86,11 @@ const Pets = () => {
   }, [requestSend]);
 
   const columns = [
-    { field: "id", headerName: "ID", flex: 0.5 },
+    { field: "id", headerName: "ID", width: 50 },
     {
       field: "photo",
       headerName: "Photo",
-      flex: 0.5,
+      width: 80,
       renderCell: ({ row: { photo } }) => {
         return <Avatar src={photo} />;
       },
@@ -91,17 +99,17 @@ const Pets = () => {
     {
       field: "name",
       headerName: "Nom",
-      flex: 0.5,
+      width: 80,
     },
     {
       field: "date_de_naissance",
       headerName: "Date Naissance",
-      flex: 0.75,
+      width: 80,
     },
     {
       field: "vaccine",
       headerName: "Vaccine",
-      flex: 0.5,
+      width: 80,
       renderCell: ({ row: { vaccine } }) => {
         return <LensIcon color={vaccine === "Oui" ? "success" : "error"} />;
       },
@@ -109,17 +117,17 @@ const Pets = () => {
     {
       field: "sexe",
       headerName: "Sexe",
-      flex: 0.5,
+      width: 80,
     },
     {
       field: "type",
       headerName: "Type",
-      flex: 0.5,
+      width: 80,
     },
     {
       field: "race",
       headerName: "Race",
-      flex: 0.75,
+      width: 80,
       valueGetter: (params) => {
         return params.row.race.name;
       },
@@ -127,7 +135,7 @@ const Pets = () => {
     {
       field: "client",
       headerName: "Propriétaire",
-      flex: 0.75,
+      width: 80,
       valueGetter: (params) => {
         return params.row.client.full_name;
       },
@@ -136,7 +144,7 @@ const Pets = () => {
     {
       field: "actions",
       headerName: "Actions",
-      flex: 1.5,
+      width: 280,
       renderCell: ({ row, row: { id } }) => {
         return (
           <Box
@@ -151,7 +159,7 @@ const Pets = () => {
               sx={{ borderRadius: 28 }}
               color="info"
               width="10px"
-              onClick={() => handleClickOpen(row)}
+              onClick={() => handleClickOpen(row, "Info")}
             >
               <VisibilityIcon color={colors.blueAccent[100]} />
             </Button>
@@ -160,7 +168,7 @@ const Pets = () => {
               sx={{ borderRadius: 28 }}
               color="success"
               width="10px"
-              onClick={() => navigate(`update-pet/${id}`)}
+              onClick={() => handleClickOpen(row, "Form")}
             >
               <EditIcon color={colors.greenAccent[200]} />
             </Button>
@@ -182,88 +190,86 @@ const Pets = () => {
 
   return (
     <>
-      {isLoadingListPets || isLoadingDeletePet || !pet ? (
-        <LinearProgress color="secondary" />
-      ) : (
-        <>
-          {statusPet?.success && (
-            <SuccessMessage
-              message={
-                statusPet?.message ||
-                "Vote Opération a été effectuée avec succès !"
-              }
-            />
-          )}
-
-          {(!statusPet?.success || pet?.message) && (
-            <ErrorMessage message={statusPet?.message || pet?.message} />
-          )}
-          <Box m="20px">
-            <Header title="PETS" subtitle="List des pets" />
-            {openPetInfo && (
-              <InfoPet
-                open={openPetInfo}
-                close={handleClose}
-                data={petDetail}
-              />
-            )}
-            <Box
-              m="40px 0 0 0"
-              height="65vh"
-              sx={{
-                "& .MuiDataGrid-root": {
-                  border: "none",
-                },
-                "& .MuiDataGrid-cell": {
-                  borderBottom: "none",
-                },
-                "& .name-column--cell": {
-                  color: colors.greenAccent[300],
-                },
-                "& .MuiDataGrid-columnHeaders": {
-                  backgroundColor: colors.blueAccent[700],
-                  borderBottom: "none",
-                },
-                "& .MuiDataGrid-virtualScroller": {
-                  backgroundColor: colors.primary[400],
-                },
-                "& .MuiDataGrid-footerContainer": {
-                  borderTop: "none",
-                  backgroundColor: colors.blueAccent[700],
-                },
-                "& .MuiCheckbox-root": {
-                  color: `${colors.greenAccent[200]} !important`,
-                },
-                "& .MuiDataGrid-toolbarContainer .MuiButton-text": {
-                  color: `${colors.grey[100]} !important`,
-                },
-              }}
-            >
-              <Button
-                color="info"
-                variant="outlined"
-                onClick={() => navigate("add-pet")}
-              >
-                <AddIcon />
-                <Typography color={colors.grey[100]} sx={{ ml: "5px" }}>
-                  Ajouter Pet
-                </Typography>
-              </Button>
-              <DataGrid
-                rowCount={pet?.meta?.total}
-                rows={pet?.data || []}
-                columns={columns}
-                components={{ Toolbar: GridToolbar }}
-                paginationModel={paginationModel}
-                onPaginationModelChange={setPaginationModel}
-                pageSizeOptions={[
-                  pet?.data?.length === 0 ? 0 : paginationModel.pageSize,
-                ]}
-              />
-            </Box>
-          </Box>
-        </>
+      {statusPet?.success && (
+        <SuccessMessage
+          message={
+            statusPet?.message || "Vote Opération a été effectuée avec succès !"
+          }
+        />
       )}
+
+      {(!statusPet?.success || pet?.message) && (
+        <ErrorMessage message={statusPet?.message || pet?.message} />
+      )}
+      <Box m="20px">
+        <Header title="PETS" subtitle="List des pets" />
+        {openPetInfo && (
+          <InfoPet open={openPetInfo} close={handleClose} data={petDetail} />
+        )}
+        {openPetForm && (
+          <FormPets
+            open={openPetForm}
+            close={handleClose}
+            data={petDetail}
+            setRequestSend={setRequestSend}
+          />
+        )}
+        <Box
+          m="40px 0 0 0"
+          height="65vh"
+          sx={{
+            "& .MuiDataGrid-root": {
+              border: "none",
+            },
+            "& .MuiDataGrid-cell": {
+              borderBottom: "none",
+            },
+            "& .name-column--cell": {
+              color: colors.greenAccent[300],
+            },
+            "& .MuiDataGrid-columnHeaders": {
+              backgroundColor: colors.blueAccent[700],
+              borderBottom: "none",
+            },
+            "& .MuiDataGrid-virtualScroller": {
+              backgroundColor: colors.primary[400],
+            },
+            "& .MuiDataGrid-footerContainer": {
+              borderTop: "none",
+              backgroundColor: colors.blueAccent[700],
+            },
+            "& .MuiCheckbox-root": {
+              color: `${colors.greenAccent[200]} !important`,
+            },
+            "& .MuiDataGrid-toolbarContainer .MuiButton-text": {
+              color: `${colors.grey[100]} !important`,
+            },
+          }}
+        >
+          <Button
+            color="info"
+            variant="outlined"
+            onClick={() => handleClickOpen(null, "Form")}
+          >
+            <AddIcon />
+            <Typography color={colors.grey[100]} sx={{ ml: "5px" }}>
+              Ajouter Pet
+            </Typography>
+          </Button>
+          <DataGrid
+            loading={isLoadingListPets || isLoadingDeletePet}
+            rowCount={pet?.meta?.total}
+            rows={pet?.data || []}
+            columns={columns}
+            components={{ Toolbar: GridToolbar }}
+            paginationModel={paginationModel}
+            onPaginationModelChange={setPaginationModel}
+            pageSizeOptions={[
+              pet?.data?.length === 0 ? 0 : paginationModel.pageSize,
+            ]}
+          />
+        </Box>
+      </Box>
     </>
   );
 };

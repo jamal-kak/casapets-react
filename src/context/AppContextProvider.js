@@ -7,6 +7,7 @@ import { BoxContextProvider } from "./boxContext";
 import { RaceContextProvider } from "./raceContext";
 import { ServiceContextProvider } from "./serviceContext";
 import { TarifContextProvider } from "./tarifContext";
+import { DashContextProvider } from "./dashContext";
 
 import { AppContextCombiner } from "./AppContextCombiner";
 
@@ -20,6 +21,7 @@ const providers = [
   RaceContextProvider,
   ServiceContextProvider,
   TarifContextProvider,
+  DashContextProvider,
 ];
 
 export const AppContextProvider = AppContextCombiner(...providers);

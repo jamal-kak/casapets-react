@@ -19,3 +19,9 @@ export const SERVICE_API_URL = BASE_API_URL + "services";
 export const SERVICE_API_URL_LIST = BASE_API_URL_LIST + "services";
 export const RACES_API_URL = BASE_API_URL + "races";
 export const TARIFS_API_URL = BASE_API_URL + "tarifs";
+
+// Dashboard
+export const CLIENT_LIST = BASE_API_URL_LIST + "clients";
+export const VET_LIST = BASE_API_URL_LIST + "veterinaires";
+export const PET_LIST = BASE_API_URL_LIST + "pets";
+export const RESERVATION_LIST = BASE_API_URL_LIST + "reservations";

@@ -26,6 +26,9 @@ import { useClientContext } from "../../hooks/clients/useClientContext";
 import { useListClient } from "../../hooks/clients/useListClient";
 import { useDeleteClient } from "../../hooks/clients/useDeleteClient";
 
+// Scenes
+import FormClient from "./FormClient";
+
 const Clients = () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
@@ -44,9 +47,20 @@ const Clients = () => {
     page: 0,
     pageSize: 7,
   });
+  const [openClientForm, setOpenClientForm] = useState(false);
+  const [dataClient, setDataClient] = useState({});
 
   const handleList = async () => {
     await listClient();
+  };
+
+  const handleClickOpen = (data = null) => {
+    setDataClient(data);
+    setOpenClientForm(true);
+  };
+
+  const handleClose = () => {
+    setOpenClientForm(false);
   };
 
   const handleDelete = async (id) => {
@@ -60,33 +74,33 @@ const Clients = () => {
   }, [requestSend]);
 
   const columns = [
-    { field: "id", headerName: "ID", flex: 0.5 },
+    { field: "id", headerName: "ID", width: 100 },
     {
       field: "full_name",
       headerName: "Nom & Prénom",
-      flex: 1,
+      width: 200,
       cellClassName: "name-column--cell",
     },
     {
       field: "phone",
       headerName: "Téléphone",
-      flex: 1,
+      width: 200,
     },
     {
       field: "email",
       headerName: "Email",
-      flex: 1,
+      width: 200,
     },
     {
       field: "adresse",
       headerName: "Adresse",
-      flex: 1,
+      width: 350,
     },
     {
       field: "actions",
       headerName: "Actions",
-      flex: 1,
-      renderCell: ({ row: { id } }) => {
+      width: 250,
+      renderCell: ({ row, row: { id } }) => {
         return (
           <Box
             width="100%"
@@ -99,7 +113,7 @@ const Clients = () => {
               variant="outlined"
               sx={{ borderRadius: 28 }}
               color="success"
-              onClick={() => navigate(`update-client/${id}`)}
+              onClick={() => handleClickOpen(row)}
             >
               <EditIcon color={colors.greenAccent[200]} />
             </Button>
@@ -121,80 +135,83 @@ const Clients = () => {
 
   return (
     <>
-      {isLoading || isLoadingDeleteClient || !client?.data ? (
-        <LinearProgress color="secondary" />
-      ) : (
-        <>
-          {statusClient?.success && (
-            <SuccessMessage
-              message={
-                statusClient?.message ||
-                "Vote Opération a été effectuée avec succès !"
-              }
-            />
-          )}
-          {!statusClient?.success && (
-            <ErrorMessage message={statusClient?.message} />
-          )}
-          <Box m="20px">
-            <Header title="CLIENTS" subtitle="List des clients" />
-            <Box
-              m="40px 0 0 0"
-              height="65vh"
-              sx={{
-                "& .MuiDataGrid-root": {
-                  border: "none",
-                },
-                "& .MuiDataGrid-cell": {
-                  borderBottom: "none",
-                },
-                "& .name-column--cell": {
-                  color: colors.greenAccent[300],
-                },
-                "& .MuiDataGrid-columnHeaders": {
-                  backgroundColor: colors.blueAccent[700],
-                  borderBottom: "none",
-                },
-                "& .MuiDataGrid-virtualScroller": {
-                  backgroundColor: colors.primary[400],
-                },
-                "& .MuiDataGrid-footerContainer": {
-                  borderTop: "none",
-                  backgroundColor: colors.blueAccent[700],
-                },
-                "& .MuiCheckbox-root": {
-                  color: `${colors.greenAccent[200]} !important`,
-                },
-                "& .MuiDataGrid-toolbarContainer .MuiButton-text": {
-                  color: `${colors.grey[100]} !important`,
-                },
-              }}
-            >
-              <Button
-                color="info"
-                variant="outlined"
-                onClick={() => navigate("add-client")}
-              >
-                <AddIcon />
-                <Typography color={colors.grey[100]} sx={{ ml: "5px" }}>
-                  Ajouter Client
-                </Typography>
-              </Button>
-              <DataGrid
-                rowCount={client?.meta?.total}
-                rows={client?.data || []}
-                columns={columns}
-                components={{ Toolbar: GridToolbar }}
-                paginationModel={paginationModel}
-                onPaginationModelChange={setPaginationModel}
-                pageSizeOptions={[
-                  client?.data?.length === 0 ? 0 : paginationModel.pageSize,
-                ]}
-              />
-            </Box>
-          </Box>
-        </>
+      {statusClient?.success && (
+        <SuccessMessage
+          message={
+            statusClient?.message ||
+            "Vote Opération a été effectuée avec succès !"
+          }
+        />
       )}
+      {!statusClient?.success && (
+        <ErrorMessage message={statusClient?.message} />
+      )}
+      {openClientForm && (
+        <FormClient
+          open={openClientForm}
+          close={handleClose}
+          data={dataClient}
+          setRequestSend={setRequestSend}
+        />
+      )}
+      <Box m="20px">
+        <Header title="CLIENTS" subtitle="List des clients" />
+        <Box
+          m="40px 0 0 0"
+          height="65vh"
+          sx={{
+            "& .MuiDataGrid-root": {
+              border: "none",
+            },
+            "& .MuiDataGrid-cell": {
+              borderBottom: "none",
+            },
+            "& .name-column--cell": {
+              color: colors.greenAccent[300],
+            },
+            "& .MuiDataGrid-columnHeaders": {
+              backgroundColor: colors.blueAccent[700],
+              borderBottom: "none",
+            },
+            "& .MuiDataGrid-virtualScroller": {
+              backgroundColor: colors.primary[400],
+            },
+            "& .MuiDataGrid-footerContainer": {
+              borderTop: "none",
+              backgroundColor: colors.blueAccent[700],
+            },
+            "& .MuiCheckbox-root": {
+              color: `${colors.greenAccent[200]} !important`,
+            },
+            "& .MuiDataGrid-toolbarContainer .MuiButton-text": {
+              color: `${colors.grey[100]} !important`,
+            },
+          }}
+        >
+          <Button
+            color="info"
+            variant="outlined"
+            onClick={() => handleClickOpen()}
+          >
+            <AddIcon />
+            <Typography color={colors.grey[100]} sx={{ ml: "5px" }}>
+              Ajouter Client
+            </Typography>
+          </Button>
+          <DataGrid
+            loading={isLoading || isLoadingDeleteClient}
+            rowCount={client?.meta?.total}
+            rows={client?.data || []}
+            columns={columns}
+            components={{ Toolbar: GridToolbar }}
+            paginationModel={paginationModel}
+            onPaginationModelChange={setPaginationModel}
+            pageSizeOptions={[
+              client?.data?.length === 0 ? 0 : paginationModel.pageSize,
+            ]}
+          />
+        </Box>
+      </Box>
     </>
   );
 };

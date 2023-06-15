@@ -7,6 +7,13 @@ import { useTheme, Box, Button, LinearProgress } from "@mui/material";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { tokens } from "../../theme";
 
+// Mui Dialog
+import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
+import DialogContentText from "@mui/material/DialogContentText";
+import DialogTitle from "@mui/material/DialogTitle";
+
 // Formik Lib
 import { Formik } from "formik";
 import * as yup from "yup";
@@ -20,7 +27,7 @@ import { useUpdateVet } from "../../hooks/veterinaire/useUpdateVet";
 // Components
 import { Header, InputText, ErrorMessage } from "../../components";
 
-const FormVet = () => {
+const FormVet = ({ open, close, data, setRequestSend }) => {
   const isNonMobile = useMediaQuery("(min-width:600px)");
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
@@ -51,48 +58,45 @@ const FormVet = () => {
     city: yup.string().required("Ville est Obligatoire"),
   });
   const initialValues = {
-    reference: veterinaire?.data?.reference || `VET-${Date.now()}`,
-    full_name: veterinaire?.data?.full_name || "",
-    adresse: veterinaire?.data?.adresse || "",
-    phone: veterinaire?.data?.phone || "",
-    email: veterinaire?.data?.email || "",
-    city: veterinaire?.data?.city || "",
+    reference: data?.reference || `VET-${Date.now()}`,
+    full_name: data?.full_name || "",
+    adresse: data?.adresse || "",
+    phone: data?.phone || "",
+    email: data?.email || "",
+    city: data?.city || "",
   };
 
   const handleFormSubmitVet = async (values) => {
-    if (!id) {
+    if (!data) {
       await addVet(values);
     } else {
-      await updateVet(id, values);
+      await updateVet(data.id, values);
     }
-
-    navigate("/vet");
+    close();
+    setRequestSend((prev) => !prev);
   };
 
   return (
-    <>
-      {isLoadingFindVet ? (
-        <LinearProgress color="secondary" />
-      ) : (
+    <Dialog
+      open={open}
+      onClose={close}
+      aria-labelledby="alert-dialog-title"
+      aria-describedby="alert-dialog-description"
+      sx={{ borderRadius: 28 }}
+    >
+      <DialogTitle
+        id="alert-dialog-title"
+        fontSize={20}
+        sx={{ backgroundColor: colors.blueAccent[700] }}
+      >
+        {!data ? "Ajouter Vétérinaire" : "Modifier Vétérinaire"}
+      </DialogTitle>
+      <DialogContent sx={{ backgroundColor: colors.primary[400] }}>
         <>
           {(isLoadingAddVet || isLoadingUpdateVet) && (
             <LinearProgress color="secondary" />
           )}
-
-          {veterinaire?.message && (
-            <ErrorMessage message={veterinaire?.message} />
-          )}
-
           <Box m="20px">
-            <Header
-              title={id ? "MODIFIER VÉTÉRINAIRE" : "AJOUTER VÉTÉRINAIRE"}
-              subtitle={
-                id
-                  ? "Modifier ce vétérinaire"
-                  : "Ajouter un nouveau vétérinaire"
-              }
-            />
-
             <Formik
               onSubmit={handleFormSubmitVet}
               initialValues={initialValues}
@@ -110,7 +114,7 @@ const FormVet = () => {
                   <Box
                     display="grid"
                     gap="30px"
-                    gridTemplateColumns="repeat(6, minmax(0, 1fr))"
+                    gridTemplateColumns="repeat(4, minmax(0, 1fr))"
                     sx={{
                       "& > div": {
                         gridColumn: isNonMobile ? undefined : "span 6",
@@ -194,8 +198,13 @@ const FormVet = () => {
             </Formik>
           </Box>
         </>
-      )}
-    </>
+      </DialogContent>
+      <DialogActions sx={{ backgroundColor: colors.blueAccent[700] }}>
+        <Button color="warning" variant="contained" onClick={close}>
+          Annuler
+        </Button>
+      </DialogActions>
+    </Dialog>
   );
 };
 
