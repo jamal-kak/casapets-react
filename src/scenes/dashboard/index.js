@@ -8,7 +8,13 @@ import {
   LinearProgress,
 } from "@mui/material";
 import { tokens } from "../../theme";
-import { Header, StatBox, ProgressCircle, LineChart } from "../../components";
+import {
+  Header,
+  StatBox,
+  ProgressCircle,
+  LineChart,
+  RecentRdv,
+} from "../../components";
 import DownloadOutlinedIcon from "@mui/icons-material/DownloadOutlined";
 import EditCalendarIcon from "@mui/icons-material/EditCalendar";
 import VaccinesIcon from "@mui/icons-material/Vaccines";
@@ -149,7 +155,19 @@ const Dashboard = () => {
           backgroundColor={colors.primary[400]}
           overflow="auto"
         >
-          hhh
+          <Box
+            display="flex"
+            justifyContent="space-between"
+            alignItems="center"
+            borderBottom={`4px solid ${colors.primary[500]}`}
+            colors={colors.grey[100]}
+            p="15px"
+          >
+            <Typography color={colors.grey[100]} variant="h5" fontWeight="600">
+              Réservations récente
+            </Typography>
+          </Box>
+          <RecentRdv />
         </Box>
         {/* ROW 2 */}
       </Box>

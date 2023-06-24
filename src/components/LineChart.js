@@ -75,7 +75,7 @@ const LineChart = ({ isCustomLineColors = false, isDashboard = false }) => {
                 fontWeight="600"
                 color={colors.grey[100]}
               >
-                Revenue Generated
+                Revenus générés
               </Typography>
               <Typography
                 variant="h3"

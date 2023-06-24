@@ -6,6 +6,7 @@ import ErrorMessage from "./ErrorMessage";
 import StatBox from "./StatBox";
 import ProgressCircle from "./ProgressCircle";
 import LineChart from "./LineChart";
+import RecentRdv from "./RecentRdv";
 
 export {
   Header,
@@ -16,4 +17,5 @@ export {
   StatBox,
   ProgressCircle,
   LineChart,
+  RecentRdv,
 };
