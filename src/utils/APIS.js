@@ -24,4 +24,5 @@ export const TARIFS_API_URL = BASE_API_URL + "tarifs";
 export const CLIENT_LIST = BASE_API_URL_LIST + "clients";
 export const VET_LIST = BASE_API_URL_LIST + "veterinaires";
 export const PET_LIST = BASE_API_URL_LIST + "pets";
-export const RESERVATION_LIST = BASE_API_URL_LIST + "reservations";
+export const RESERVATION_LIST = BASE_API_URL + "reservations";
+export const FACTURE_LIST = BASE_API_URL + "factures";

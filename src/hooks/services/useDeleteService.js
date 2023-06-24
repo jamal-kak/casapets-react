@@ -5,6 +5,7 @@ import { SERVICE_API_URL } from "../../utils/APIS";
 
 export const useDeleteService = () => {
   const [isLoadingDeleteService, setIsLoadingDeleteService] = useState(null);
+  const [isErrorDeleteService, setIsErrorDeleteService] = useState(null);
   const { dispatch } = useServiceContext();
   const { access_token } = JSON.parse(localStorage.getItem("user"));
   axios.defaults.headers.common["Authorization"] = `Bearer ${access_token}`;
@@ -19,6 +20,7 @@ export const useDeleteService = () => {
       setIsLoadingDeleteService(false);
     } catch (error) {
       await dispatch({ type: "DELETE", payload: error.response.data });
+      console.log(error.response.data);
       setIsLoadingDeleteService(false);
     }
   };

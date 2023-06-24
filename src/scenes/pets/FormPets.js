@@ -29,6 +29,8 @@ import * as yup from "yup";
 
 // Context
 import { useClientContext } from "../../hooks/clients/useClientContext";
+import { useRaceContext } from "../../hooks/races/useRaceContext";
+import { useListRaces } from "../../hooks/races/useListRaces";
 import { useAddPets } from "../../hooks/pets/useAddPets";
 import { useListClient } from "../../hooks/clients/useListClient";
 import { useUpdatePet } from "../../hooks/pets/useUpdatePet";
@@ -49,12 +51,15 @@ const FormPet = ({ open, close, data, setRequestSend }) => {
   const colors = tokens(theme.palette.mode);
 
   const { client } = useClientContext();
+  const { races } = useRaceContext();
+  const { listRaces, isLoadingListRaces } = useListRaces();
   const { listClient, isLoading } = useListClient();
   const { addPets, isLoadingAddPets } = useAddPets();
   const { updatePet, isLoadingUpdatePet } = useUpdatePet();
 
   const handleList = async () => {
     await listClient();
+    await listRaces();
   };
 
   useEffect(() => {
@@ -73,7 +78,7 @@ const FormPet = ({ open, close, data, setRequestSend }) => {
     id: data?.id,
     reference: data?.reference || `PET-${Date.now()}`,
     name: data?.name || "",
-    date_de_naissance: data?.date_de_naissance || null,
+    date_de_naissance: data?.date_de_naissance || undefined,
     sexe_key: data?.sexe_key || "",
     type_key: data?.type_key || "",
     race_id: data?.race_id || "",
@@ -81,13 +86,13 @@ const FormPet = ({ open, close, data, setRequestSend }) => {
     couleur: data?.couleur || "",
     vaccine: data?.vaccine || "",
     castre: data?.castre || "",
-    date_dernier_antiparasite: data?.date_dernier_antiparasite || null,
+    date_dernier_antiparasite: data?.date_dernier_antiparasite || undefined,
     habitude_alimentaire: data?.habitude_alimentaire || "",
     temperament_du_chat: data?.temperament_du_chat || "",
     probleme_de_sante: data?.probleme_de_sante || "",
     remarque: data?.remarque || "",
-    date_dernier_vaccin: data?.date_dernier_vaccin || null,
-    date_dernier_vermifuge: data?.date_dernier_vermifuge || null,
+    date_dernier_vaccin: data?.date_dernier_vaccin || undefined,
+    date_dernier_vermifuge: data?.date_dernier_vermifuge || undefined,
     photo: undefined,
   };
 
@@ -108,7 +113,15 @@ const FormPet = ({ open, close, data, setRequestSend }) => {
       onClose={close}
       aria-labelledby="alert-dialog-title"
       aria-describedby="alert-dialog-description"
-      sx={{ borderRadius: 28 }}
+      sx={{
+        "& .MuiDialog-container": {
+          "& .MuiPaper-root": {
+            width: "100%",
+            maxWidth: "900px", // Set your width here
+          },
+        },
+        borderRadius: 28,
+      }}
     >
       <DialogTitle
         id="alert-dialog-title"
@@ -242,11 +255,12 @@ const FormPet = ({ open, close, data, setRequestSend }) => {
                       onChange={handleChange}
                       value={values.race_id}
                       error={!!touched.race_id && !!errors.race_id}
-                      options={[
-                        { id: 1, title: "Labrador Retriever" },
-                        { id: 2, title: "Berger allemand" },
-                      ]}
-                      optionName="title"
+                      options={
+                        races?.data.filter(
+                          (item) => item.type === values.type_key
+                        ) || []
+                      }
+                      optionName="name"
                     />
 
                     <InputSelect
@@ -390,9 +404,22 @@ const FormPet = ({ open, close, data, setRequestSend }) => {
                     />
                   </Box>
                   <Box display="flex" justifyContent="end" mt="20px">
-                    <Button type="submit" color="secondary" variant="contained">
-                      Enregistrer
-                    </Button>
+                    <DialogActions>
+                      <Button
+                        type="submit"
+                        color="secondary"
+                        variant="contained"
+                      >
+                        Enregistrer
+                      </Button>
+                      <Button
+                        color="warning"
+                        variant="contained"
+                        onClick={close}
+                      >
+                        Annuler
+                      </Button>
+                    </DialogActions>
                   </Box>
                 </form>
               )}
@@ -400,11 +427,6 @@ const FormPet = ({ open, close, data, setRequestSend }) => {
           </Box>
         </LocalizationProvider>
       </DialogContent>
-      <DialogActions sx={{ backgroundColor: colors.blueAccent[700] }}>
-        <Button color="warning" variant="contained" onClick={close}>
-          Annuler
-        </Button>
-      </DialogActions>
     </Dialog>
   );
 };

@@ -22,6 +22,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import EditIcon from "@mui/icons-material/Edit";
 import LensIcon from "@mui/icons-material/Lens";
+import VaccinesIcon from "@mui/icons-material/Vaccines";
 
 // Components
 import { Header, SuccessMessage, ErrorMessage } from "../../components";
@@ -99,19 +100,27 @@ const Pets = () => {
     {
       field: "name",
       headerName: "Nom",
-      width: 80,
+      width: 120,
     },
     {
       field: "date_de_naissance",
       headerName: "Date Naissance",
-      width: 80,
+      width: 120,
     },
     {
       field: "vaccine",
       headerName: "Vaccine",
       width: 80,
       renderCell: ({ row: { vaccine } }) => {
-        return <LensIcon color={vaccine === "Oui" ? "success" : "error"} />;
+        return <VaccinesIcon color={vaccine === "Oui" ? "success" : "error"} />;
+      },
+    },
+    {
+      field: "castre",
+      headerName: "Castre",
+      width: 80,
+      renderCell: ({ row: { castre } }) => {
+        return <LensIcon color={castre === "Oui" ? "success" : "error"} />;
       },
     },
     {
@@ -127,7 +136,7 @@ const Pets = () => {
     {
       field: "race",
       headerName: "Race",
-      width: 80,
+      width: 130,
       valueGetter: (params) => {
         return params.row.race.name;
       },
@@ -135,7 +144,7 @@ const Pets = () => {
     {
       field: "client",
       headerName: "Propriétaire",
-      width: 80,
+      width: 150,
       valueGetter: (params) => {
         return params.row.client.full_name;
       },
@@ -151,7 +160,7 @@ const Pets = () => {
             width="100%"
             p="5px"
             display="flex"
-            justifyContent="center"
+            justifyContent="start"
             gap={1}
           >
             <Button

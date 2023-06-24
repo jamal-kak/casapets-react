@@ -126,10 +126,19 @@ const FormRace = ({ open, close, data, setRequestSend }) => {
                       optionName="title"
                     />
                   </Box>
-                  <Box display="flex" justifyContent="end" mt="20px">
-                    <Button type="submit" color="success" variant="contained">
-                      Enregistrer
-                    </Button>
+                  <Box display="flex" justifyContent="start" mt="20px">
+                    <DialogActions>
+                      <Button type="submit" color="success" variant="contained">
+                        Enregistrer
+                      </Button>
+                      <Button
+                        color="warning"
+                        variant="contained"
+                        onClick={close}
+                      >
+                        Annuler
+                      </Button>
+                    </DialogActions>
                   </Box>
                 </form>
               )}
@@ -137,11 +146,6 @@ const FormRace = ({ open, close, data, setRequestSend }) => {
           </Box>
         </>
       </DialogContent>
-      <DialogActions sx={{ backgroundColor: colors.blueAccent[700] }}>
-        <Button color="warning" variant="contained" onClick={close}>
-          Annuler
-        </Button>
-      </DialogActions>
     </Dialog>
   );
 };

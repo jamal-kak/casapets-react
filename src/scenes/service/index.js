@@ -37,12 +37,10 @@ const Services = () => {
 
   const { listServices, isLoadingListServices } = useListServices();
   const { deleteService, isLoadingDeleteService } = useDeleteService();
-  const { services, updatedService, NewService, deletedService } =
+  const { services, updatedService, newService, deletedService } =
     useServiceContext();
   const [requestSend, setRequestSend] = useState(false);
   const [statusService, setStatusService] = useState({});
-
-  const navigate = useNavigate();
 
   const [paginationModel, setPaginationModel] = useState({
     page: 0,
@@ -56,6 +54,7 @@ const Services = () => {
   };
 
   const handleClickOpen = (data = null) => {
+    setStatusService({});
     setDataService(data);
     setOpenServiceForm(true);
   };
@@ -65,13 +64,14 @@ const Services = () => {
   };
 
   const handleDelete = async (id) => {
+    await setStatusService({});
     await deleteService(id);
     setRequestSend((prev) => !prev);
   };
 
   useEffect(() => {
     handleList();
-    setStatusService(NewService || updatedService || deletedService);
+    setStatusService(newService || updatedService || deletedService || {});
   }, [requestSend]);
 
   const columns = [
@@ -134,7 +134,7 @@ const Services = () => {
   ];
 
   return (
-    <>
+    <Box m="20px">
       {statusService?.success && (
         <SuccessMessage
           message={
@@ -143,9 +143,10 @@ const Services = () => {
           }
         />
       )}
-      {!statusService?.success && (
+      {statusService?.success === false ? (
         <ErrorMessage message={statusService?.message} />
-      )}
+      ) : null}
+      <Header title="SERVICES" subtitle="List des Services" />
       {openServiceForm && (
         <FormService
           open={openServiceForm}
@@ -154,65 +155,62 @@ const Services = () => {
           setRequestSend={setRequestSend}
         />
       )}
-      <Box m="20px">
-        <Header title="SERVICES" subtitle="List des Services" />
-        <Box
-          m="40px 0 0 0"
-          height="65vh"
-          sx={{
-            "& .MuiDataGrid-root": {
-              border: "none",
-            },
-            "& .MuiDataGrid-cell": {
-              borderBottom: "none",
-            },
-            "& .name-column--cell": {
-              color: colors.greenAccent[300],
-            },
-            "& .MuiDataGrid-columnHeaders": {
-              backgroundColor: colors.blueAccent[700],
-              borderBottom: "none",
-            },
-            "& .MuiDataGrid-virtualScroller": {
-              backgroundColor: colors.primary[400],
-            },
-            "& .MuiDataGrid-footerContainer": {
-              borderTop: "none",
-              backgroundColor: colors.blueAccent[700],
-            },
-            "& .MuiCheckbox-root": {
-              color: `${colors.greenAccent[200]} !important`,
-            },
-            "& .MuiDataGrid-toolbarContainer .MuiButton-text": {
-              color: `${colors.grey[100]} !important`,
-            },
-          }}
+      <Box
+        m="40px 0 0 0"
+        height="65vh"
+        sx={{
+          "& .MuiDataGrid-root": {
+            border: "none",
+          },
+          "& .MuiDataGrid-cell": {
+            borderBottom: "none",
+          },
+          "& .name-column--cell": {
+            color: colors.greenAccent[300],
+          },
+          "& .MuiDataGrid-columnHeaders": {
+            backgroundColor: colors.blueAccent[700],
+            borderBottom: "none",
+          },
+          "& .MuiDataGrid-virtualScroller": {
+            backgroundColor: colors.primary[400],
+          },
+          "& .MuiDataGrid-footerContainer": {
+            borderTop: "none",
+            backgroundColor: colors.blueAccent[700],
+          },
+          "& .MuiCheckbox-root": {
+            color: `${colors.greenAccent[200]} !important`,
+          },
+          "& .MuiDataGrid-toolbarContainer .MuiButton-text": {
+            color: `${colors.grey[100]} !important`,
+          },
+        }}
+      >
+        <Button
+          color="info"
+          variant="outlined"
+          onClick={() => handleClickOpen()}
         >
-          <Button
-            color="info"
-            variant="outlined"
-            onClick={() => handleClickOpen()}
-          >
-            <AddIcon />
-            <Typography color={colors.grey[100]} sx={{ ml: "5px" }}>
-              Ajouter Service
-            </Typography>
-          </Button>
-          <DataGrid
-            loading={isLoadingListServices || isLoadingDeleteService}
-            rowCount={services?.meta?.total}
-            rows={services?.data || []}
-            columns={columns}
-            components={{ Toolbar: GridToolbar }}
-            paginationModel={paginationModel}
-            onPaginationModelChange={setPaginationModel}
-            pageSizeOptions={[
-              services?.data?.length === 0 ? 0 : paginationModel.pageSize,
-            ]}
-          />
-        </Box>
+          <AddIcon />
+          <Typography color={colors.grey[100]} sx={{ ml: "5px" }}>
+            Ajouter Service
+          </Typography>
+        </Button>
+        <DataGrid
+          loading={isLoadingListServices || isLoadingDeleteService}
+          rowCount={services?.meta?.total}
+          rows={services?.data || []}
+          columns={columns}
+          components={{ Toolbar: GridToolbar }}
+          paginationModel={paginationModel}
+          onPaginationModelChange={setPaginationModel}
+          pageSizeOptions={[
+            services?.data?.length === 0 ? 0 : paginationModel.pageSize,
+          ]}
+        />
       </Box>
-    </>
+    </Box>
   );
 };
 

@@ -24,7 +24,15 @@ const InfoPet = ({ open, close, data }) => {
       onClose={close}
       aria-labelledby="alert-dialog-title"
       aria-describedby="alert-dialog-description"
-      sx={{ borderRadius: 28 }}
+      sx={{
+        "& .MuiDialog-container": {
+          "& .MuiPaper-root": {
+            width: "100%",
+            maxWidth: "700px", // Set your width here
+          },
+        },
+        borderRadius: 28,
+      }}
     >
       <DialogTitle
         id="alert-dialog-title"
@@ -151,9 +159,8 @@ const InfoPet = ({ open, close, data }) => {
         </Box>
       </DialogContent>
       <DialogActions sx={{ backgroundColor: colors.blueAccent[700] }}>
-        <Button onClick={close}>Disagree</Button>
-        <Button onClick={close} autoFocus>
-          Agree
+        <Button color="warning" variant="contained" onClick={close}>
+          Annuler
         </Button>
       </DialogActions>
     </Dialog>

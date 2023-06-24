@@ -57,6 +57,7 @@ const Clients = () => {
   const handleClickOpen = (data = null) => {
     setDataClient(data);
     setOpenClientForm(true);
+    setStatusClient({});
   };
 
   const handleClose = () => {
@@ -64,6 +65,7 @@ const Clients = () => {
   };
 
   const handleDelete = async (id) => {
+    await setStatusClient({});
     await deleteClient(id);
     setRequestSend((prev) => !prev);
   };

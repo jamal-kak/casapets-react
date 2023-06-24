@@ -5,6 +5,7 @@ import SuccessMessage from "./SuccessMessage";
 import ErrorMessage from "./ErrorMessage";
 import StatBox from "./StatBox";
 import ProgressCircle from "./ProgressCircle";
+import LineChart from "./LineChart";
 
 export {
   Header,
@@ -14,4 +15,5 @@ export {
   ErrorMessage,
   StatBox,
   ProgressCircle,
+  LineChart,
 };

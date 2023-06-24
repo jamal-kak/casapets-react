@@ -8,7 +8,7 @@ import {
   LinearProgress,
 } from "@mui/material";
 import { tokens } from "../../theme";
-import { Header, StatBox, ProgressCircle } from "../../components";
+import { Header, StatBox, ProgressCircle, LineChart } from "../../components";
 import DownloadOutlinedIcon from "@mui/icons-material/DownloadOutlined";
 import EditCalendarIcon from "@mui/icons-material/EditCalendar";
 import VaccinesIcon from "@mui/icons-material/Vaccines";
@@ -58,6 +58,7 @@ const Dashboard = () => {
           display="flex"
           alignItems="center"
           justifyContent="center"
+          sx={{ borderRadius: 5 }}
         >
           <StatBox
             title="reservation"
@@ -77,6 +78,7 @@ const Dashboard = () => {
           display="flex"
           alignItems="center"
           justifyContent="center"
+          sx={{ borderRadius: 5 }}
         >
           <StatBox
             title="vet"
@@ -96,6 +98,7 @@ const Dashboard = () => {
           display="flex"
           alignItems="center"
           justifyContent="center"
+          sx={{ borderRadius: 5 }}
         >
           <StatBox
             title="pet"
@@ -115,6 +118,7 @@ const Dashboard = () => {
           display="flex"
           alignItems="center"
           justifyContent="center"
+          sx={{ borderRadius: 5 }}
         >
           <StatBox
             title="client"
@@ -131,6 +135,22 @@ const Dashboard = () => {
         {/* ROW 1 */}
 
         {/* ROW 2 */}
+        <Box
+          gridColumn="span 8"
+          gridRow="span 2"
+          backgroundColor={colors.primary[400]}
+        >
+          <LineChart isDashboard={true} />
+        </Box>
+
+        <Box
+          gridColumn="span 4"
+          gridRow="span 2"
+          backgroundColor={colors.primary[400]}
+          overflow="auto"
+        >
+          hhh
+        </Box>
         {/* ROW 2 */}
       </Box>
       {/* GRID & CHARTS */}

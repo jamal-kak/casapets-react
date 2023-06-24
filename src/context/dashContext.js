@@ -12,6 +12,8 @@ export const dashReducer = (state, action) => {
       return { ...state, dashPet: action.payload };
     case "RESERVATION":
       return { ...state, dashRes: action.payload };
+    case "FACTURE":
+      return { ...state, dashFacture: action.payload };
     default:
       return state;
   }
@@ -23,6 +25,7 @@ export const DashContextProvider = ({ children }) => {
     dashPet: null,
     dashVet: null,
     dashRes: null,
+    dashFacture: null,
   });
 
   return (

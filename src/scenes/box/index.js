@@ -20,6 +20,8 @@ import { Header, ErrorMessage, SuccessMessage } from "../../components";
 import { useBoxContext } from "../../hooks/boxs/useBoxContext";
 import { useListBoxs } from "../../hooks/boxs/useListBoxs";
 import { useDeleteBox } from "../../hooks/boxs/useDeleteBox";
+
+// Scenes
 import FormBox from "./FormBox";
 
 const Boxs = () => {
@@ -53,6 +55,7 @@ const Boxs = () => {
   };
 
   const handleDelete = async (id) => {
+    await setStatusBox({});
     await deleteBox(id);
     setRequestSend((prev) => !prev);
   };

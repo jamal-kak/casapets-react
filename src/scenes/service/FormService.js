@@ -131,8 +131,9 @@ const FormService = ({ open, close, data, setRequestSend }) => {
                       error={!!touched.type_key && !!errors.type_key}
                       span={2}
                       options={[
-                        { id: 1, title: "Chien" },
-                        { id: 2, title: "Chat" },
+                        { id: 1, title: "Chat / Chien" },
+                        { id: 2, title: "Chien" },
+                        { id: 3, title: "Chat" },
                       ]}
                       optionName="title"
                     />
@@ -152,10 +153,19 @@ const FormService = ({ open, close, data, setRequestSend }) => {
                       optionName="title"
                     />
                   </Box>
-                  <Box display="flex" justifyContent="end" mt="20px">
-                    <Button type="submit" color="success" variant="contained">
-                      Enregistrer
-                    </Button>
+                  <Box display="flex" justifyContent="start" mt="20px">
+                    <DialogActions>
+                      <Button type="submit" color="success" variant="contained">
+                        Enregistrer
+                      </Button>
+                      <Button
+                        color="warning"
+                        variant="contained"
+                        onClick={close}
+                      >
+                        Annuler
+                      </Button>
+                    </DialogActions>
                   </Box>
                 </form>
               )}
@@ -163,11 +173,6 @@ const FormService = ({ open, close, data, setRequestSend }) => {
           </Box>
         </>
       </DialogContent>
-      <DialogActions sx={{ backgroundColor: colors.blueAccent[700] }}>
-        <Button color="warning" variant="contained" onClick={close}>
-          Annuler
-        </Button>
-      </DialogActions>
     </Dialog>
   );
 };
