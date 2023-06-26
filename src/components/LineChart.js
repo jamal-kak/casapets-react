@@ -33,7 +33,7 @@ const LineChart = ({ isCustomLineColors = false, isDashboard = false }) => {
   const [total, setTotal] = useState(0);
 
   const handleList = async () => {
-    await listFacture();
+    await listFacture("chart");
     let _total = 0;
     let total_mad = new Intl.NumberFormat("fr-FR", {
       style: "currency",

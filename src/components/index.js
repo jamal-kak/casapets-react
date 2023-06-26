@@ -7,6 +7,7 @@ import StatBox from "./StatBox";
 import ProgressCircle from "./ProgressCircle";
 import LineChart from "./LineChart";
 import RecentRdv from "./RecentRdv";
+import Factures from "./Factures";
 
 export {
   Header,
@@ -18,4 +19,5 @@ export {
   ProgressCircle,
   LineChart,
   RecentRdv,
+  Factures,
 };

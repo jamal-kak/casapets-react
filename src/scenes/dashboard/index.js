@@ -7,6 +7,7 @@ import {
   useTheme,
   LinearProgress,
 } from "@mui/material";
+
 import { tokens } from "../../theme";
 import {
   Header,
@@ -14,6 +15,7 @@ import {
   ProgressCircle,
   LineChart,
   RecentRdv,
+  Factures,
 } from "../../components";
 import DownloadOutlinedIcon from "@mui/icons-material/DownloadOutlined";
 import EditCalendarIcon from "@mui/icons-material/EditCalendar";
@@ -170,6 +172,29 @@ const Dashboard = () => {
           <RecentRdv />
         </Box>
         {/* ROW 2 */}
+
+        {/* ROW 3 */}
+        <Box
+          gridColumn="span 8"
+          gridRow="span 2"
+          backgroundColor={colors.primary[400]}
+        >
+          <Box
+            display="flex"
+            justifyContent="space-between"
+            alignItems="center"
+            borderBottom={`1px solid ${colors.primary[500]}`}
+            colors={colors.grey[100]}
+            p="8px"
+          >
+            <Typography color={colors.grey[100]} variant="h5" fontWeight="600">
+              Liste Factures
+            </Typography>
+          </Box>
+          <Factures />
+        </Box>
+
+        {/* ROW 3 */}
       </Box>
       {/* GRID & CHARTS */}
     </Box>

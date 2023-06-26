@@ -14,6 +14,10 @@ export const dashReducer = (state, action) => {
       return { ...state, dashRes: action.payload };
     case "FACTURE":
       return { ...state, dashFacture: action.payload };
+    case "FACTURE_T":
+      return { ...state, dashFactureTable: action.payload };
+    case "ETAT_FACTURE":
+      return { ...state, dashEtatFacture: action.payload };
     case "RDV":
       return { ...state, dashRdv: action.payload };
     default:
@@ -29,6 +33,8 @@ export const DashContextProvider = ({ children }) => {
     dashRes: null,
     dashFacture: null,
     dashRdv: null,
+    dashFactureTable: null,
+    dashEtatFacture: null,
   });
 
   return (
