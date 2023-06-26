@@ -32,11 +32,16 @@ export const useListFactures = () => {
 
         // Calculate monthly totals
         await response.data.data.forEach((invoice) => {
-          const month = new Date(invoice?.created_at).getMonth();
-          const monthName = new Date(2000, month, 1).toLocaleString("default", {
-            month: "long",
-          });
-          monthlyTotals[monthName] += invoice?.total;
+          if (invoice?.status === "Payé") {
+            const month = new Date(invoice?.created_at).getMonth();
+            const monthName = new Date(2000, month, 1).toLocaleString(
+              "default",
+              {
+                month: "long",
+              }
+            );
+            monthlyTotals[monthName] += invoice?.total;
+          }
         });
 
         const chartData = await Object.entries(monthlyTotals).map(
@@ -50,7 +55,7 @@ export const useListFactures = () => {
         await dispatch({ type: "FACTURE_T", payload: response.data });
         setTimeout(
           () => dispatch({ type: "ETAT_FACTURE", payload: null }),
-          10000
+          5000
         );
       }
 

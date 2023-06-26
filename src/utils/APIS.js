@@ -27,3 +27,4 @@ export const PET_LIST = BASE_API_URL_LIST + "pets";
 export const RESERVATION_LIST = BASE_API_URL + "reservations";
 export const FACTURE_LIST = BASE_API_URL + "factures";
 export const RDV_LIST = BASE_API_URL + "reservations";
+export const DOWNLOAD = BASE_API_URL + "download";

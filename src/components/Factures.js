@@ -20,6 +20,7 @@ import { tokens } from "../theme";
 import { useDashContext } from "../hooks/dashboard/useDashContext";
 import { useListFactures } from "../hooks/dashboard/useListFactures";
 import { useStateFacture } from "../hooks/dashboard/useStateFacture";
+import { useDownload } from "../hooks/dashboard/useDownload";
 
 // Component
 import ErrorMessage from "./ErrorMessage";
@@ -33,6 +34,7 @@ const Factures = () => {
   const { dashFactureTable, dashEtatFacture } = useDashContext();
   const { listFacture, errorListFacture, isLoadingListFacture } =
     useListFactures();
+  const { download, errorDownload, isLoadingDownload } = useDownload();
   const { changeStateFacture, isLoadingStatusPaye } = useStateFacture();
 
   const [paginationModel, setPaginationModel] = useState({
@@ -52,6 +54,10 @@ const Factures = () => {
     await changeStateFacture(id);
     dataFetchedRef.current = false;
     setRequestSend((prev) => !prev);
+  };
+
+  const downloadFacture = async (id, type) => {
+    await download(id, type);
   };
 
   useEffect(() => {
@@ -98,24 +104,34 @@ const Factures = () => {
     },
     {
       field: "actions",
-      headerName: "Paiement",
+      headerName: "Paiement (Payé / Non Payé)",
       width: 200,
       renderCell: ({ row: { status, id } }) => {
         return (
-          <Box
-            width="100%"
-            p="5px"
-            display="flex"
-            justifyContent="left"
-            gap={1}
-          >
+          <Box width="100%" p="5px" display="flex" justifyContent="left">
             <Switch
               checked={status === "Non payé" ? false : true}
               color="success"
               onChange={() => handlePay(id)}
               inputProps={{ "aria-label": "controlled" }}
             />
-            <Button variant="outlined" sx={{ borderRadius: 28 }} color="info">
+          </Box>
+        );
+      },
+    },
+    {
+      field: "download",
+      headerName: "Téléchargement",
+      width: 120,
+      renderCell: ({ row: { reservation } }) => {
+        return (
+          <Box width="100%" p="5px" display="flex" justifyContent="left">
+            <Button
+              variant="outlined"
+              sx={{ borderRadius: 28 }}
+              color="info"
+              onClick={() => downloadFacture(reservation.id, "facture")}
+            >
               <FileDownloadRoundedIcon color="info" />
             </Button>
           </Box>
