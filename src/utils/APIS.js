@@ -19,3 +19,8 @@ export const SERVICE_API_URL = BASE_API_URL + "services";
 export const SERVICE_API_URL_LIST = BASE_API_URL_LIST + "services";
 export const RACES_API_URL = BASE_API_URL + "races";
 export const TARIFS_API_URL = BASE_API_URL + "tarifs";
+
+
+// Résérvation
+export const RESERVATION_API_URL = BASE_API_URL + "reservations";
+export const RESERVATION_API_URL_LIST = BASE_API_URL_LIST + "reservations";

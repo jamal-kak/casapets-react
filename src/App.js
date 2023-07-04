@@ -26,6 +26,7 @@ import Services from "./scenes/service";
 import FormService from "./scenes/service/FormService";
 import Tarifs from "./scenes/tarif";
 import FormTarif from "./scenes/tarif/FormTarif";
+import Reservations from "./scenes/reservation";
 
 
 function App() {
@@ -170,6 +171,10 @@ function App() {
                 <Route
                   path="/races"
                   element={user ? <Races /> : <Navigate to="/login" />}
+                />
+                <Route
+                  path="/reservations"
+                  element={user ? <Reservations /> : <Navigate to="/login" />}
                 />
                 <Route
                   path="/races/add-race"

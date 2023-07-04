@@ -179,7 +179,7 @@ const Sidebar = () => {
             </Typography>
             <Item
               title="Rendez-vous"
-              to="/form"
+              to="/reservations"
               icon={<CalendarMonthIcon />}
               selected={selected}
               setSelected={setSelected}
