@@ -88,10 +88,10 @@ const Sidebar = () => {
                 ml="15px"
               >
                 <img
-                style={{ width: "172px" }}
-                src={CasapetsLogoLogo}
-                alt="Logo de Petopia"
-              />
+                  style={{ width: "172px" }}
+                  src={CasapetsLogoLogo}
+                  alt="Logo de Petopia"
+                />
                 <IconButton onClick={() => setIsCollapsed(!isCollapsed)}>
                   <MenuOutlinedIcon />
                 </IconButton>

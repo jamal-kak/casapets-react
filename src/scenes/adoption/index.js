@@ -86,7 +86,7 @@ const Adoptions = () => {
     {
       field: "photo",
       headerName: "Photo",
-      width: 80,
+      width: 100,
       renderCell: ({ row: { photo } }) => {
         return <Avatar src={photo} />;
       },
@@ -100,12 +100,12 @@ const Adoptions = () => {
     {
       field: "date_de_naissance",
       headerName: "Date Naissance",
-      width: 120,
+      width: 140,
     },
     {
       field: "race",
       headerName: "Race",
-      width: 130,
+      width: 150,
       valueGetter: (params) => {
         return params.row.race.name;
       },
@@ -113,30 +113,22 @@ const Adoptions = () => {
     {
       field: "caractere",
       headerName: "Caractère",
-      width: 100,
+      width: 120,
     },
     {
       field: "age",
       headerName: "Age",
-      width: 80,
-    },
-    {
-      field: "client",
-      headerName: "Adopteur",
-      width: 120,
-      renderCell: ({ row: { client_id } }) => {
-        return client_id !== null ? client_id : "Sans Adopteur";
-      },
+      width: 100,
     },
     {
       field: "profile",
       headerName: "Profile",
-      width: 100,
+      width: 120,
     },
     {
       field: "disponible",
       headerName: "Disponible",
-      width: 80,
+      width: 100,
       renderCell: ({ row: { disponible } }) => {
         return <LensIcon color={disponible === "oui" ? "success" : "error"} />;
       },
