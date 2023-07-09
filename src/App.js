@@ -13,18 +13,14 @@ import { ColorModeContext, useMode } from "./theme";
 
 import { useAuthContext } from "./hooks/useAuthContext";
 import FormUser from "./scenes/users/FormUser";
-import FormClient from "./scenes/clients/FormClient";
-import FormPet from "./scenes/pets/FormPets";
 import Vets from "./scenes/veterinaire";
-import FormVet from "./scenes/veterinaire/FormVet";
 import Boxs from "./scenes/box";
-import FormBox from "./scenes/box/FormBox";
 import Races from "./scenes/race";
-import FormRace from "./scenes/race/FormRace";
 import Services from "./scenes/service";
-import FormService from "./scenes/service/FormService";
 import Tarifs from "./scenes/tarif";
-import FormTarif from "./scenes/tarif/FormTarif";
+import Adoptions from "./scenes/adoption";
+import Reservations from "./scenes/reservation";
+import DemandeAdoption from "./scenes/demandeAdoption";
 
 function App() {
   const { user, isLoading } = useAuthContext();
@@ -77,53 +73,9 @@ function App() {
                   path="/clients"
                   element={user ? <Clients /> : <Navigate to="/login" />}
                 />
-
-                <Route
-                  path="/clients/add-client"
-                  element={
-                    user && user?.user?.role_id !== 2 ? (
-                      <FormClient />
-                    ) : (
-                      <Navigate to="/login" />
-                    )
-                  }
-                />
-
-                <Route
-                  path="/clients/update-client/:id"
-                  element={
-                    user && user?.user?.role_id !== 2 ? (
-                      <FormClient />
-                    ) : (
-                      <Navigate to="/login" />
-                    )
-                  }
-                />
                 <Route
                   path="/pets"
                   element={user ? <Pets /> : <Navigate to="/login" />}
-                />
-
-                <Route
-                  path="/pets/add-pet"
-                  element={
-                    user && user?.user?.role_id !== 2 ? (
-                      <FormPet />
-                    ) : (
-                      <Navigate to="/login" />
-                    )
-                  }
-                />
-
-                <Route
-                  path="/pets/update-pet/:id"
-                  element={
-                    user && user?.user?.role_id !== 2 ? (
-                      <FormPet />
-                    ) : (
-                      <Navigate to="/login" />
-                    )
-                  }
                 />
 
                 <Route
@@ -131,28 +83,6 @@ function App() {
                   element={
                     user && user?.user?.role_id !== 2 ? (
                       <Vets />
-                    ) : (
-                      <Navigate to="/login" />
-                    )
-                  }
-                />
-
-                <Route
-                  path="/vet/add-vet"
-                  element={
-                    user && user?.user?.role_id !== 2 ? (
-                      <FormVet />
-                    ) : (
-                      <Navigate to="/login" />
-                    )
-                  }
-                />
-
-                <Route
-                  path="/vet/update-vet/:id"
-                  element={
-                    user && user?.user?.role_id !== 2 ? (
-                      <FormVet />
                     ) : (
                       <Navigate to="/login" />
                     )
@@ -168,26 +98,6 @@ function App() {
                   path="/races"
                   element={user ? <Races /> : <Navigate to="/login" />}
                 />
-                <Route
-                  path="/races/add-race"
-                  element={
-                    user && user?.user?.role_id !== 2 ? (
-                      <FormRace />
-                    ) : (
-                      <Navigate to="/login" />
-                    )
-                  }
-                />
-                <Route
-                  path="/races/update-race/:id"
-                  element={
-                    user && user?.user?.role_id !== 2 ? (
-                      <FormRace />
-                    ) : (
-                      <Navigate to="/login" />
-                    )
-                  }
-                />
 
                 <Route
                   path="/services"
@@ -195,51 +105,23 @@ function App() {
                 />
 
                 <Route
-                  path="/services/add-service"
-                  element={
-                    user && user?.user?.role_id !== 2 ? (
-                      <FormService />
-                    ) : (
-                      <Navigate to="/login" />
-                    )
-                  }
-                />
-
-                <Route
-                  path="/services/update-service/:id"
-                  element={
-                    user && user?.user?.role_id !== 2 ? (
-                      <FormService />
-                    ) : (
-                      <Navigate to="/login" />
-                    )
-                  }
-                />
-
-                <Route
                   path="/tarifs"
                   element={user ? <Tarifs /> : <Navigate to="/login" />}
                 />
-
                 <Route
-                  path="/tarifs/add-tarif"
-                  element={
-                    user && user?.user?.role_id !== 2 ? (
-                      <FormTarif />
-                    ) : (
-                      <Navigate to="/login" />
-                    )
-                  }
+                  path="/adoptions"
+                  element={user ? <Adoptions /> : <Navigate to="/login" />}
                 />
 
                 <Route
-                  path="/tarifs/update-tarif/:id"
+                  path="/reservations"
+                  element={user ? <Reservations /> : <Navigate to="/login" />}
+                />
+
+                <Route
+                  path="/demandesAdoption"
                   element={
-                    user && user?.user?.role_id !== 2 ? (
-                      <FormTarif />
-                    ) : (
-                      <Navigate to="/login" />
-                    )
+                    user ? <DemandeAdoption /> : <Navigate to="/login" />
                   }
                 />
               </Routes>

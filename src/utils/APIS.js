@@ -15,16 +15,26 @@ export const PETS_API_URL = BASE_API_URL + "pets";
 
 // Résérvation
 export const BOX_API_URL = BASE_API_URL + "boxs";
+export const SELECT_BOX = BASE_API_URL_LIST + "boxs";
 export const SERVICE_API_URL = BASE_API_URL + "services";
 export const SERVICE_API_URL_LIST = BASE_API_URL_LIST + "services";
 export const RACES_API_URL = BASE_API_URL + "races";
 export const TARIFS_API_URL = BASE_API_URL + "tarifs";
+export const STATUS_RES_API_URL = BASE_API_URL + "change-status";
+
+// Adoption
+export const ADOPTIONS_LIST = BASE_API_URL + "adoptions";
+
+// Demande Adoption
+export const DEMANDES_ADOPTION = BASE_API_URL + "demandeAdoptions";
+export const CHANGE_STATUS = BASE_API_URL + "change-demande-adoptions";
 
 // Dashboard
 export const CLIENT_LIST = BASE_API_URL_LIST + "clients";
 export const VET_LIST = BASE_API_URL_LIST + "veterinaires";
 export const PET_LIST = BASE_API_URL_LIST + "pets";
 export const RESERVATION_LIST = BASE_API_URL + "reservations";
+export const RESERVATION_API_URL_LIST = BASE_API_URL_LIST + "reservations";
 export const FACTURE_LIST = BASE_API_URL + "factures";
 export const RDV_LIST = BASE_API_URL + "reservations";
 export const DOWNLOAD = BASE_API_URL + "download";

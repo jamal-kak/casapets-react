@@ -55,12 +55,22 @@ const RecentRdv = () => {
                   {rdv?.id}
                 </Typography>
                 <Typography color={colors.grey[100]}>
-                  {rdv?.client_id}
+                  {rdv?.client?.full_name}
                 </Typography>
               </Box>
               <Box color={colors.grey[100]}>{rdv?.date_rdv}</Box>
               <Box
-                backgroundColor={colors.redAccent[400]}
+                backgroundColor={
+                  rdv?.status === "Devis"
+                    ? colors.grey[400]
+                    : rdv?.status === "Confirmé"
+                    ? colors.blueAccent[400]
+                    : rdv?.status === "termine"
+                    ? colors.primary[700]
+                    : rdv?.status === "Facturé"
+                    ? colors.greenAccent[700]
+                    : colors.redAccent[400]
+                }
                 p="5px 10px"
                 borderRadius="4px"
               >

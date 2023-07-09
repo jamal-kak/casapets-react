@@ -1,16 +1,8 @@
 // React Lib
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
 
 // Mui Lib
-import {
-  Box,
-  Button,
-  Typography,
-  Avatar,
-  useTheme,
-  LinearProgress,
-} from "@mui/material";
+import { Box, Button, Typography, Avatar, useTheme } from "@mui/material";
 import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 
 // Mui Theme
@@ -22,70 +14,71 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import EditIcon from "@mui/icons-material/Edit";
 import LensIcon from "@mui/icons-material/Lens";
-import VaccinesIcon from "@mui/icons-material/Vaccines";
 
 // Components
 import { Header, SuccessMessage, ErrorMessage } from "../../components";
 
 // Context
-import { usePetsContext } from "../../hooks/pets/usePetsContext";
-import { useListPets } from "../../hooks/pets/useListPets";
-import { useDeletePet } from "../../hooks/pets/useDeletePet";
+import { useAdoptionsContext } from "../../hooks/adoptions/useAdoptionsContext";
+import { useListAdoptions } from "../../hooks/adoptions/useListAdoptions";
+import { useDeleteAdoption } from "../../hooks/adoptions/useDeleteAdoption";
 
 // Scenes
-import InfoPet from "./InfoPet";
-import FormPets from "./FormPets";
+import InfoAdoption from "./InfoAdoption";
+import FormAdoption from "./FormAdoption";
 
-const Pets = () => {
+const Adoptions = () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
 
   const { user } = JSON.parse(localStorage.getItem("user"));
 
-  const { pet, newPet, updatedPet, deletedPet } = usePetsContext();
-  const { listPets, isLoadingListPets } = useListPets();
-  const { deletePet, isLoadingDeletePet } = useDeletePet();
+  const { adoption, newAdoption, updatedAdoption, deletedAdoption } =
+    useAdoptionsContext();
+  const { listAdoptions, isLoadingListAdoptions } = useListAdoptions();
+  const { deleteAdoption, isLoadingDeleteAdoption } = useDeleteAdoption();
 
   const [requestSend, setRequestSend] = useState(false);
-  const [statusPet, setStatusPet] = useState({});
+  const [statusAdoption, setStatusAdoption] = useState({});
   const [paginationModel, setPaginationModel] = useState({
     page: 0,
     pageSize: 7,
   });
-  const [openPetInfo, setOpenPetInfo] = useState(false);
-  const [petDetail, setPetDetail] = useState({});
-  const [openPetForm, setOpenPetForm] = useState(false);
-
-  const navigate = useNavigate();
+  const [openAdoptionInfo, setOpenAdoptionInfo] = useState(false);
+  const [adoptionDetail, setAdoptionDetail] = useState({});
+  const [openAdoptionForm, setOpenAdoptionForm] = useState(false);
 
   const handleClickOpen = (data, typeForm) => {
-    setPetDetail(data);
+    setStatusAdoption(null);
+    setAdoptionDetail(null);
+    setAdoptionDetail(data);
     if (typeForm === "Info") {
-      setOpenPetInfo(true);
+      setOpenAdoptionInfo(true);
     } else if (typeForm === "Form") {
       console.log("hh");
-      setOpenPetForm(true);
+      setOpenAdoptionForm(true);
     }
   };
 
   const handleClose = () => {
-    setPetDetail(null);
-    setOpenPetInfo(false);
-    setOpenPetForm(false);
+    setAdoptionDetail(null);
+    setOpenAdoptionInfo(false);
+    setOpenAdoptionForm(false);
   };
 
   const handleList = async () => {
-    await listPets();
+    await listAdoptions();
   };
 
   const handleDelete = async (id) => {
-    await deletePet(id);
+    setStatusAdoption(null);
+    await deleteAdoption(id);
     setRequestSend((prev) => !prev);
   };
 
   useEffect(() => {
     handleList();
-    setStatusPet(newPet || updatedPet || deletedPet);
+    setStatusAdoption(newAdoption || updatedAdoption || deletedAdoption);
   }, [requestSend]);
 
   const columns = [
@@ -110,32 +103,6 @@ const Pets = () => {
       width: 120,
     },
     {
-      field: "vaccine",
-      headerName: "Vaccine",
-      width: 80,
-      renderCell: ({ row: { vaccine } }) => {
-        return <VaccinesIcon color={vaccine === "Oui" ? "success" : "error"} />;
-      },
-    },
-    {
-      field: "castre",
-      headerName: "Castre",
-      width: 80,
-      renderCell: ({ row: { castre } }) => {
-        return <LensIcon color={castre === "Oui" ? "success" : "error"} />;
-      },
-    },
-    {
-      field: "sexe",
-      headerName: "Sexe",
-      width: 80,
-    },
-    {
-      field: "type",
-      headerName: "Type",
-      width: 80,
-    },
-    {
       field: "race",
       headerName: "Race",
       width: 130,
@@ -144,11 +111,34 @@ const Pets = () => {
       },
     },
     {
+      field: "caractere",
+      headerName: "Caractère",
+      width: 100,
+    },
+    {
+      field: "age",
+      headerName: "Age",
+      width: 80,
+    },
+    {
       field: "client",
-      headerName: "Propriétaire",
-      width: 150,
-      valueGetter: (params) => {
-        return params.row.client.full_name;
+      headerName: "Adopteur",
+      width: 120,
+      renderCell: ({ row: { client_id } }) => {
+        return client_id !== null ? client_id : "Sans Adopteur";
+      },
+    },
+    {
+      field: "profile",
+      headerName: "Profile",
+      width: 100,
+    },
+    {
+      field: "disponible",
+      headerName: "Disponible",
+      width: 80,
+      renderCell: ({ row: { disponible } }) => {
+        return <LensIcon color={disponible === "oui" ? "success" : "error"} />;
       },
     },
 
@@ -203,27 +193,32 @@ const Pets = () => {
 
   return (
     <>
-      {statusPet?.success && (
+      {statusAdoption?.success && (
         <SuccessMessage
           message={
-            statusPet?.message || "Vote Opération a été effectuée avec succès !"
+            statusAdoption?.message ||
+            "Vote Opération a été effectuée avec succès !"
           }
         />
       )}
 
-      {(!statusPet?.success || pet?.message) && (
-        <ErrorMessage message={statusPet?.message || pet?.message} />
+      {(statusAdoption?.errors || adoption?.message) && (
+        <ErrorMessage message={statusAdoption?.message || adoption?.message} />
       )}
       <Box m="20px">
-        <Header title="PETS" subtitle="List des pets" />
-        {openPetInfo && (
-          <InfoPet open={openPetInfo} close={handleClose} data={petDetail} />
-        )}
-        {openPetForm && (
-          <FormPets
-            open={openPetForm}
+        <Header title="ADOPTIONS" subtitle="List des adoptions" />
+        {openAdoptionInfo && (
+          <InfoAdoption
+            open={openAdoptionInfo}
             close={handleClose}
-            data={petDetail}
+            data={adoptionDetail}
+          />
+        )}
+        {openAdoptionForm && (
+          <FormAdoption
+            open={openAdoptionForm}
+            close={handleClose}
+            data={adoptionDetail}
             setRequestSend={setRequestSend}
           />
         )}
@@ -267,19 +262,19 @@ const Pets = () => {
           >
             <AddIcon />
             <Typography color={colors.grey[100]} sx={{ ml: "5px" }}>
-              Ajouter Pet
+              Ajouter Adoption
             </Typography>
           </Button>
           <DataGrid
-            loading={isLoadingListPets || isLoadingDeletePet}
-            rowCount={pet?.meta?.total}
-            rows={pet?.data || []}
+            loading={isLoadingListAdoptions || isLoadingDeleteAdoption}
+            rowCount={adoption?.meta?.total}
+            rows={adoption?.data || []}
             columns={columns}
             components={{ Toolbar: GridToolbar }}
             paginationModel={paginationModel}
             onPaginationModelChange={setPaginationModel}
             pageSizeOptions={[
-              pet?.data?.length === 0 ? 0 : paginationModel.pageSize,
+              adoption?.data?.length === 0 ? 0 : paginationModel.pageSize,
             ]}
           />
         </Box>
@@ -288,4 +283,4 @@ const Pets = () => {
   );
 };
 
-export default Pets;
+export default Adoptions;

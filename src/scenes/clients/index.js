@@ -33,6 +33,8 @@ const Clients = () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
 
+  const { user } = JSON.parse(localStorage.getItem("user"));
+
   const { client, newClient, updatedClient, deletedClient } =
     useClientContext();
   const { listClient, isLoading } = useListClient();
@@ -116,6 +118,7 @@ const Clients = () => {
               sx={{ borderRadius: 28 }}
               color="success"
               onClick={() => handleClickOpen(row)}
+              disabled={user?.role_id === 2 ? true : false}
             >
               <EditIcon color={colors.greenAccent[200]} />
             </Button>
@@ -126,6 +129,7 @@ const Clients = () => {
               onClick={() => {
                 handleDelete(id);
               }}
+              disabled={user?.role_id === 2 ? true : false}
             >
               <DeleteIcon color={colors.redAccent[200]} />
             </Button>
@@ -194,6 +198,7 @@ const Clients = () => {
             color="info"
             variant="outlined"
             onClick={() => handleClickOpen()}
+            disabled={user?.role_id === 2 ? true : false}
           >
             <AddIcon />
             <Typography color={colors.grey[100]} sx={{ ml: "5px" }}>

@@ -35,6 +35,8 @@ const Tarifs = () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
 
+  const { user } = JSON.parse(localStorage.getItem("user"));
+
   const { listTarifs, isLoadingListTarifs } = useListTarifs();
   const { deleteTarif, isLoadingDeleteTarif } = useDeleteTarif();
   const { tarifs, updatedTarif, newTarif, deletedTarif } = useTarifContext();
@@ -123,6 +125,7 @@ const Tarifs = () => {
               color="success"
               width="10px"
               onClick={() => handleClickOpen(row)}
+              disabled={user?.role_id === 2 ? true : false}
             >
               <EditIcon color={colors.greenAccent[200]} />
             </Button>
@@ -131,6 +134,7 @@ const Tarifs = () => {
               sx={{ borderRadius: 28 }}
               color="warning"
               onClick={() => handleDelete(id)}
+              disabled={user?.role_id === 2 ? true : false}
             >
               <DeleteIcon color={colors.redAccent[200]} />
             </Button>
@@ -198,6 +202,7 @@ const Tarifs = () => {
             color="info"
             variant="outlined"
             onClick={() => handleClickOpen()}
+            disabled={user?.role_id === 2 ? true : false}
           >
             <AddIcon />
             <Typography color={colors.grey[100]} sx={{ ml: "5px" }}>

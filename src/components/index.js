@@ -8,6 +8,7 @@ import ProgressCircle from "./ProgressCircle";
 import LineChart from "./LineChart";
 import RecentRdv from "./RecentRdv";
 import Factures from "./Factures";
+import AdoptionState from "./AdoptionState";
 
 export {
   Header,
@@ -20,4 +21,5 @@ export {
   LineChart,
   RecentRdv,
   Factures,
+  AdoptionState,
 };

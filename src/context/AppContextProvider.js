@@ -7,7 +7,10 @@ import { BoxContextProvider } from "./boxContext";
 import { RaceContextProvider } from "./raceContext";
 import { ServiceContextProvider } from "./serviceContext";
 import { TarifContextProvider } from "./tarifContext";
+import { AdoptionsContextProvider } from "./adoptionsContext";
 import { DashContextProvider } from "./dashContext";
+import { ReservationContextProvider } from "./reservationContext";
+import { DemandeAdoptionContextProvider } from "./demandeAdoptionContext";
 
 import { AppContextCombiner } from "./AppContextCombiner";
 
@@ -21,7 +24,10 @@ const providers = [
   RaceContextProvider,
   ServiceContextProvider,
   TarifContextProvider,
+  AdoptionsContextProvider,
   DashContextProvider,
+  ReservationContextProvider,
+  DemandeAdoptionContextProvider,
 ];
 
 export const AppContextProvider = AppContextCombiner(...providers);

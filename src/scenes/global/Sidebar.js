@@ -173,11 +173,11 @@ const Sidebar = () => {
               color={colors.grey[300]}
               sx={{ m: "15px 0 5px 20px" }}
             >
-              Résérvation
+              RDV
             </Typography>
             <Item
-              title="Rendez-vous"
-              to="/form"
+              title="Résérvation"
+              to="/reservations"
               icon={<CalendarMonthIcon />}
               selected={selected}
               setSelected={setSelected}
@@ -208,6 +208,27 @@ const Sidebar = () => {
             <Item
               title="Races"
               to="/races"
+              icon={<CallSplitIcon />}
+              selected={selected}
+              setSelected={setSelected}
+            />
+            <Typography
+              variant="h6"
+              color={colors.grey[300]}
+              sx={{ m: "15px 0 5px 20px" }}
+            >
+              Adoption
+            </Typography>
+            <Item
+              title="List Adoptions"
+              to="/adoptions"
+              icon={<CallSplitIcon />}
+              selected={selected}
+              setSelected={setSelected}
+            />
+            <Item
+              title="Demandes Adoption"
+              to="/demandesAdoption"
               icon={<CallSplitIcon />}
               selected={selected}
               setSelected={setSelected}

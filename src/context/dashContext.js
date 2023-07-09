@@ -20,6 +20,8 @@ export const dashReducer = (state, action) => {
       return { ...state, dashEtatFacture: action.payload };
     case "RDV":
       return { ...state, dashRdv: action.payload };
+    case "ADOPTION":
+      return { ...state, dashAdoption: action.payload };
     default:
       return state;
   }
@@ -35,6 +37,7 @@ export const DashContextProvider = ({ children }) => {
     dashRdv: null,
     dashFactureTable: null,
     dashEtatFacture: null,
+    dashAdoption: null,
   });
 
   return (

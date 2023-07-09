@@ -16,6 +16,7 @@ import {
   LineChart,
   RecentRdv,
   Factures,
+  AdoptionState,
 } from "../../components";
 import DownloadOutlinedIcon from "@mui/icons-material/DownloadOutlined";
 import EditCalendarIcon from "@mui/icons-material/EditCalendar";
@@ -193,7 +194,27 @@ const Dashboard = () => {
           </Box>
           <Factures />
         </Box>
-
+        <Box
+          gridColumn="span 4"
+          gridRow="span 2"
+          backgroundColor={colors.primary[400]}
+          overflow="auto"
+          sx={{ height: "50vh" }}
+        >
+          <Box
+            display="flex"
+            justifyContent="space-between"
+            alignItems="center"
+            borderBottom={`4px solid ${colors.primary[500]}`}
+            colors={colors.grey[100]}
+            p="15px"
+          >
+            <Typography color={colors.grey[100]} variant="h5" fontWeight="600">
+              Status Pets en Adoption
+            </Typography>
+          </Box>
+          <AdoptionState />
+        </Box>
         {/* ROW 3 */}
       </Box>
       {/* GRID & CHARTS */}
