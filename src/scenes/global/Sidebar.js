@@ -18,6 +18,7 @@ import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import MenuOutlinedIcon from "@mui/icons-material/MenuOutlined";
 import MapOutlinedIcon from "@mui/icons-material/MapOutlined";
 import LocalHospitalIcon from "@mui/icons-material/LocalHospital";
+import { default as CasapetsLogoLogo } from "../../utils/logo.png";
 import PetsIcon from "@mui/icons-material/Pets";
 
 import { useAuthContext } from "../../hooks/useAuthContext";
@@ -86,9 +87,11 @@ const Sidebar = () => {
                 alignItems="center"
                 ml="15px"
               >
-                <Typography variant="h3" color={colors.grey[100]}>
-                  <PetsIcon fontSize="medium" /> Casa Pets
-                </Typography>
+                <img
+                style={{ width: "172px" }}
+                src={CasapetsLogoLogo}
+                alt="Logo de Petopia"
+              />
                 <IconButton onClick={() => setIsCollapsed(!isCollapsed)}>
                   <MenuOutlinedIcon />
                 </IconButton>
