@@ -27,6 +27,8 @@ import ErrorMessage from "./ErrorMessage";
 import SuccessMessage from "./SuccessMessage";
 
 const Factures = () => {
+  const { user } = JSON.parse(localStorage.getItem("user"));
+
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   const dataFetchedRef = useRef(false);
@@ -114,6 +116,7 @@ const Factures = () => {
               color="success"
               onChange={() => handlePay(id)}
               inputProps={{ "aria-label": "controlled" }}
+              disabled={user?.role_id !== 2 ? false : true}
             />
           </Box>
         );

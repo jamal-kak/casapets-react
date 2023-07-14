@@ -137,14 +137,6 @@ const Vets = () => {
             <Button
               variant="outlined"
               sx={{ borderRadius: 28 }}
-              color="info"
-              width="10px"
-            >
-              <VisibilityIcon color={colors.blueAccent[100]} />
-            </Button>
-            <Button
-              variant="outlined"
-              sx={{ borderRadius: 28 }}
               color="success"
               width="10px"
               onClick={() => handleClickOpen(row)}

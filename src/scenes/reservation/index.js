@@ -21,6 +21,7 @@ import { useReservationContext } from "../../hooks/reservations/useReservationCo
 import { useListReservations } from "../../hooks/reservations/useListReservations";
 import { useDeleteReservation } from "../../hooks/reservations/useDeleteReservation";
 import { useChangeStatus } from "../../hooks/reservations/useChangeStatus";
+import { useDownload } from "../../hooks/dashboard/useDownload";
 
 // Scenes
 import FormReservation from "./FormReservation";
@@ -32,6 +33,7 @@ const Reservations = () => {
 
   const { user } = JSON.parse(localStorage.getItem("user"));
 
+  const { download, errorDownload, isLoadingDownload } = useDownload();
   const { listReservations, isLoadingListReservations } = useListReservations();
   const { deleteReservation, isLoadingDeleteReservation } =
     useDeleteReservation();
@@ -86,6 +88,10 @@ const Reservations = () => {
     setStatusReservation(null);
     await changeStatus(id, newStatus);
     setRequestSend((prev) => !prev);
+  };
+
+  const downloadDevis = async (id, type) => {
+    await download(id, type);
   };
 
   useEffect(() => {
@@ -159,7 +165,7 @@ const Reservations = () => {
     {
       field: "actions",
       headerName: "ACTIONS",
-      width: 350,
+      width: 420,
       renderCell: ({ row, row: { id } }) => {
         return (
           <Box
@@ -216,14 +222,24 @@ const Reservations = () => {
             )}
 
             {(row.status === "Devis" || row.status === "Confirmé") && (
-              <Button
-                variant="outlined"
-                sx={{ borderRadius: 28 }}
-                color="error"
-                onClick={() => handleChangeStatus(id, "Annulé")}
-              >
-                Annuler
-              </Button>
+              <>
+                <Button
+                  variant="outlined"
+                  sx={{ borderRadius: 28 }}
+                  color="error"
+                  onClick={() => handleChangeStatus(id, "Annulé")}
+                >
+                  Annuler
+                </Button>
+                <Button
+                  variant="outlined"
+                  sx={{ borderRadius: 28 }}
+                  color="secondary"
+                  onClick={() => downloadDevis(id, "devis")}
+                >
+                  Devis
+                </Button>
+              </>
             )}
           </Box>
         );
